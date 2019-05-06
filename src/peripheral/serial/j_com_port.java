@@ -3,6 +3,7 @@ package peripheral.serial;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
+import java.io.File;
 
 import peripheral.configuration.configuration_universal;
 import peripheral.logs.debug;
@@ -10,9 +11,13 @@ import peripheral.logs.debug;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import javax.swing.ImageIcon;
+import views.peripheral_manager_view;
 
 public class j_com_port implements SerialPortDataListener
 {
+  File fichero     = new File(".");
+  
   SerialPort             serial_port;
   boolean                baud_rate_exist;
   boolean                data_bits_exist;
@@ -161,13 +166,19 @@ public class j_com_port implements SerialPortDataListener
     this.stop_bits         = stop_bits;
     this.parity            = parity;
     this.is_serial_printer = is_serial_printer;
+ 
 
     parameters = "String com_port_name: " + com_port_name + ", String baud_rate: " + baud_rate + ", String data_bits: " + data_bits + ", String stop_bits: " + stop_bits + ", String parity: " + parity;
     response = "";
     this.app_token = "";
-
+    
+ 
+    
+    
     if (com_port_opened == false)
     {
+
+      
       try
       {
         baud_rate.replaceAll("\\s{0,}", "");

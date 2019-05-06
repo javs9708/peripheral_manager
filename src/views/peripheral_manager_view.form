@@ -188,17 +188,17 @@
                                   <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="COM_port_label" min="-2" max="-2" attributes="0"/>
-                                      <Component id="status_label" min="-2" pref="77" max="-2" attributes="0"/>
                                       <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                                           <Component id="parity_label" alignment="0" max="32767" attributes="0"/>
                                           <Component id="stop_bits_label" alignment="0" max="32767" attributes="0"/>
                                           <Component id="data_bits_label" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <Component id="baud_rate_label" alignment="0" min="-2" pref="54" max="-2" attributes="0"/>
+                                      <Component id="status_label" alignment="0" min="-2" pref="142" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace pref="82" max="32767" attributes="0"/>
+                          <EmptySpace pref="51" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
@@ -247,6 +247,9 @@
                       <Image iconType="3" name="/images/green_ok.png"/>
                     </Property>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="device_details_label">
                   <Properties>
@@ -270,6 +273,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="STATUS"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="COM_port_label">
                   <Properties>
@@ -281,6 +287,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="COM port  :"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="baud_rate_label">
                   <Properties>
@@ -292,6 +301,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Baud rate :"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="data_bits_label">
                   <Properties>
@@ -303,6 +315,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Data bits   :"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="stop_bits_label">
                   <Properties>
@@ -314,6 +329,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Stop bits   :"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JLabel" name="parity_label">
                   <Properties>
@@ -325,6 +343,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Parity        :"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+                  </AuxValues>
                 </Component>
                 <Container class="javax.swing.JPanel" name="refresh_panel">
                   <Properties>
@@ -360,6 +381,9 @@
                         <Property name="text" type="java.lang.String" value="Refresh"/>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="refresh_buttonActionPerformed"/>
+                      </Events>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                           <AbsoluteConstraints x="0" y="0" width="290" height="80"/>

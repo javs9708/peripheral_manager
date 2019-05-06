@@ -8,6 +8,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
+import peripheral.launcher.start;
+import peripheral.manager.main_controller;
 
 
 public class peripheral_manager_view extends javax.swing.JFrame 
@@ -15,10 +17,14 @@ public class peripheral_manager_view extends javax.swing.JFrame
     int width            = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     int height           = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
     
-    File fichero     = new File(".");
-
-    public peripheral_manager_view() 
+ 
+    File fichero     = new File(".");   
+    
+    main_controller main_controller_instance;
+     
+    public peripheral_manager_view(main_controller main_controller_instance) 
     {
+        main_controller_instance = new main_controller();
         this.setUndecorated(true);
         initComponents();
             
@@ -27,8 +33,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
         this.add(main_panel);
         this.setBounds(width/2-main_panel.getWidth()/2,height/2-main_panel.getHeight()/2, main_panel.getWidth(), main_panel.getHeight());
         
-           
-        
+       
         BT.setContentAreaFilled(false);
         BP.setContentAreaFilled(false);
         OC.setContentAreaFilled(false);
@@ -38,7 +43,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
         details.setVisible(false);
         
         back.setVisible(false);
-        
+   
     }
 
     @SuppressWarnings("unchecked")
@@ -197,6 +202,11 @@ public class peripheral_manager_view extends javax.swing.JFrame
         refresh_button.setForeground(new java.awt.Color(255, 255, 255));
         refresh_button.setText("Refresh");
         refresh_button.setContentAreaFilled(false);
+        refresh_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refresh_buttonActionPerformed(evt);
+            }
+        });
         refresh_panel.add(refresh_button);
         refresh_button.setBounds(0, 0, 290, 80);
 
@@ -215,13 +225,13 @@ public class peripheral_manager_view extends javax.swing.JFrame
                         .addGap(48, 48, 48)
                         .addGroup(device_details_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(COM_port_label)
-                            .addComponent(status_label, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(device_details_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(parity_label, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(stop_bits_label, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(data_bits_label, javax.swing.GroupLayout.Alignment.LEADING))
-                            .addComponent(baud_rate_label, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(82, Short.MAX_VALUE))
+                            .addComponent(baud_rate_label, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(status_label, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(51, Short.MAX_VALUE))
             .addGroup(device_details_panelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(refresh_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -675,52 +685,23 @@ public class peripheral_manager_view extends javax.swing.JFrame
         text_area_data_received_unique.setText("");
     }//GEN-LAST:event_clean_buttonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(peripheral_manager_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(peripheral_manager_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(peripheral_manager_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(peripheral_manager_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void refresh_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refresh_buttonActionPerformed
+        main_controller_instance.main_controller();
+    }//GEN-LAST:event_refresh_buttonActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new peripheral_manager_view().setVisible(true);
-            }
-        });
-    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BC;
     private javax.swing.JButton BG;
     private javax.swing.JButton BP;
     private javax.swing.JButton BT;
-    private javax.swing.JLabel COM_port_label;
+    public static javax.swing.JLabel COM_port_label;
     private javax.swing.JButton OC;
     private javax.swing.JPanel atb_panel;
     private javax.swing.JLabel atb_title;
     private javax.swing.JButton back;
-    private javax.swing.JLabel baud_rate_label;
+    public static javax.swing.JLabel baud_rate_label;
     private javax.swing.JPanel bcr_panel;
     private javax.swing.JLabel bcr_title;
     private javax.swing.JPanel bg_panel;
@@ -732,7 +713,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
     private javax.swing.JLabel check_bcr;
     private javax.swing.JLabel check_bg;
     private javax.swing.JLabel check_btp;
-    private javax.swing.JLabel check_icon;
+    public static javax.swing.JLabel check_icon;
     private javax.swing.JLabel check_ocr;
     private javax.swing.JButton clean_button;
     private javax.swing.JLabel clean_label;
@@ -740,7 +721,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
     private javax.swing.JPanel clean_panel;
     private javax.swing.JButton close_button;
     private javax.swing.JLabel close_label;
-    private javax.swing.JLabel data_bits_label;
+    public static javax.swing.JLabel data_bits_label;
     private javax.swing.JLabel data_received_icon;
     private javax.swing.JLabel data_received_label;
     private javax.swing.JPanel data_received_panel;
@@ -759,7 +740,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
     private javax.swing.JLabel main_title;
     private javax.swing.JPanel ocr_panel;
     private javax.swing.JLabel ocr_title;
-    private javax.swing.JLabel parity_label;
+    public static javax.swing.JLabel parity_label;
     private javax.swing.JButton print_button;
     private javax.swing.JLabel print_icon;
     private javax.swing.JLabel print_label;
@@ -770,8 +751,8 @@ public class peripheral_manager_view extends javax.swing.JFrame
     private javax.swing.JScrollPane scroll_pane_data_received;
     private javax.swing.JScrollPane scroll_pane_data_sent;
     private javax.swing.JLabel send_icon;
-    private javax.swing.JLabel status_label;
-    private javax.swing.JLabel stop_bits_label;
+    public static javax.swing.JLabel status_label;
+    public static javax.swing.JLabel stop_bits_label;
     private javax.swing.JTextArea text_area_data_received;
     private javax.swing.JTextArea text_area_data_received_unique;
     private javax.swing.JTextArea text_area_data_sent;

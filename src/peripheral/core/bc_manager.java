@@ -1,10 +1,13 @@
 package peripheral.core;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import peripheral.serial.j_com_port;
 
 public class bc_manager{
 
-	private j_com_port j_comport_instance;
+	public j_com_port j_comport_instance;
 	public bc_manager(String com_port_name, String baud_rate, String data_bits, String stop_bits, String parity, boolean is_serial_printer)
 	{
 		
@@ -19,13 +22,21 @@ public class bc_manager{
 	
 	public void wait_for_answer()
 	{
-		while(true)
-		{
+                new Thread(new Runnable() {
+		
+		@Override
+		public void run() {
+		       
+                while(true)
+                    {
 			j_comport_instance.get_available_data();
 			//TODO call comport to check any data
 			//TODO report to user interface any answer
 			
-		}
+                    }               
+                } 		
+                }).start();
+		
 	}
 	
 	
