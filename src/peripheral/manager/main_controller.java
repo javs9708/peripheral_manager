@@ -28,13 +28,12 @@ public class main_controller
         {
             peripheral_manager_view_instance = new peripheral_manager_view(this);
             
-            bt_manager_instance = new bt_manager("COM4", "19200", "8", "1", "None", true);
+            bt_manager_instance = new bt_manager("COM5", "19200", "8", "1", "None", true);
             bp_manager_instance = new bp_manager("COM3", "19200", "8", "1", "None", true);
-            bc_manager_instance = new bc_manager("COM5", "19200", "8", "1", "None", true);
+            bc_manager_instance = new bc_manager("COM4", "19200", "8", "1", "None", true);
             bg_manager_instance = new bg_manager("COM6", "19200", "8", "1", "None", true);
             oc_manager_instance = new oc_manager("COM7", "19200", "8", "1", "None", true);
-            
-            
+          
             available_buttons();
             
             peripheral_manager_view_instance.setVisible(true);
@@ -62,65 +61,33 @@ public class main_controller
                     if(peripheral_manager_view_instance.title.getText().equals("BT"))
                     {
                        bt_manager_available();
-                    }
-                    else
-                    {
-                       peripheral_not_available();
-                    }                                      
+                    }                                    
                 }
-                else if(bp_manager_instance.isOpenedBp)
+                if(bp_manager_instance.isOpenedBp)
                 {
                     if(peripheral_manager_view_instance.title.getText().equals("BP"))
                     {
                        bp_manager_available();
-                    }
-                    else
-                    {
-                        peripheral_not_available();
-                    }
-                   
-                    
+                    }    
                 }
                 
-                else if(bc_manager_instance.isOpenedBc){
+                if(bc_manager_instance.isOpenedBc){
                     if(peripheral_manager_view_instance.title.getText().equals("BC"))
                     {
                        bc_manager_available();
-                    }
-                    else
-                    {
-                        peripheral_not_available();
-                    }
-                   
-                    
+                    }    
                 }
-                else if(bg_manager_instance.isOpenedBg){
+                if(bg_manager_instance.isOpenedBg){
                     if(peripheral_manager_view_instance.title.getText().equals("BG"))
                     {
                        bp_manager_available();
-                    }
-                    else
-                    {
-                        peripheral_not_available();
-                    }
-                   
-                    
+                    }  
                 }
-                else if(oc_manager_instance.isOpenedOc){
+                if(oc_manager_instance.isOpenedOc){
                     if(peripheral_manager_view_instance.title.getText().equals("OC"))
                     {
                        bp_manager_available();
-                    }
-                    else
-                    {
-                        peripheral_not_available();
-                    }
-                   
-                    
-                }
-                else
-                {
-                   peripheral_not_available();
+                    } 
                 }
                 
 		
