@@ -16,7 +16,6 @@ import views.peripheral_manager_view;
 
 public class j_com_port implements SerialPortDataListener
 {
-  File fichero     = new File(".");
   
   SerialPort             serial_port;
   boolean                baud_rate_exist;
@@ -171,14 +170,11 @@ public class j_com_port implements SerialPortDataListener
     parameters = "String com_port_name: " + com_port_name + ", String baud_rate: " + baud_rate + ", String data_bits: " + data_bits + ", String stop_bits: " + stop_bits + ", String parity: " + parity;
     response = "";
     this.app_token = "";
-    
- 
-    
+
     
     if (com_port_opened == false)
     {
-
-      
+     
       try
       {
         baud_rate.replaceAll("\\s{0,}", "");
@@ -706,6 +702,8 @@ public class j_com_port implements SerialPortDataListener
 
     return null;
   }
+  
+  
 
   public static void main(String[] args)
   {

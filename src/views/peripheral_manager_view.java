@@ -20,11 +20,11 @@ public class peripheral_manager_view extends javax.swing.JFrame
  
     File fichero     = new File(".");   
     
-    main_controller main_controller_instance;
+    main_controller    m_controller;
      
     public peripheral_manager_view(main_controller main_controller_instance) 
-    {
-        main_controller_instance = new main_controller();
+    {     
+        this.m_controller = main_controller_instance;
         this.setUndecorated(true);
         initComponents();
             
@@ -126,7 +126,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
 
         main_title.setFont(new java.awt.Font("Proxima Nova Alt Lt", 0, 24)); // NOI18N
         main_title.setText("Ink CUTE");
-        main_panel.add(main_title, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, 100, -1));
+        main_panel.add(main_title, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 110, -1));
 
         close_label.setFont(new java.awt.Font("Proxima Nova Alt Th", 0, 18)); // NOI18N
         close_label.setText("Close and load applications");
@@ -215,26 +215,32 @@ public class peripheral_manager_view extends javax.swing.JFrame
         device_details_panelLayout.setHorizontalGroup(
             device_details_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(device_details_panelLayout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(check_icon, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(device_details_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(device_details_panelLayout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(device_details_label, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap()
+                        .addComponent(refresh_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(device_details_panelLayout.createSequentialGroup()
-                        .addGap(48, 48, 48)
-                        .addGroup(device_details_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(COM_port_label)
-                            .addGroup(device_details_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(parity_label, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(stop_bits_label, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(data_bits_label, javax.swing.GroupLayout.Alignment.LEADING))
-                            .addComponent(baud_rate_label, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(status_label, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(51, Short.MAX_VALUE))
-            .addGroup(device_details_panelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(refresh_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(device_details_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, device_details_panelLayout.createSequentialGroup()
+                                .addGap(29, 29, 29)
+                                .addComponent(check_icon, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(device_details_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(device_details_panelLayout.createSequentialGroup()
+                                        .addGap(31, 31, 31)
+                                        .addComponent(device_details_label, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(device_details_panelLayout.createSequentialGroup()
+                                        .addGap(48, 48, 48)
+                                        .addGroup(device_details_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(status_label, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(COM_port_label, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                                            .addComponent(baud_rate_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                            .addGroup(device_details_panelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(device_details_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(data_bits_label, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(stop_bits_label, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(parity_label, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 32, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         device_details_panelLayout.setVerticalGroup(
@@ -417,6 +423,11 @@ public class peripheral_manager_view extends javax.swing.JFrame
         print_icon.setBounds(250, 40, 50, 50);
 
         print_button.setContentAreaFilled(false);
+        print_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                print_buttonActionPerformed(evt);
+            }
+        });
         print_test_panel.add(print_button);
         print_button.setBounds(0, 0, 540, 140);
 
@@ -576,17 +587,13 @@ public class peripheral_manager_view extends javax.swing.JFrame
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(32, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
                 .addComponent(main_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 940, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23))
+                .addGap(0, 55, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(main_panel, javax.swing.GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(main_panel, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE)
         );
 
         pack();
@@ -608,6 +615,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
        data_received_panel_unique.setVisible(false);
        clean_panel.setVisible(false);
        back.setVisible(true);
+       m_controller.mc();
 
     }//GEN-LAST:event_BTActionPerformed
 
@@ -624,6 +632,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
         clean_panel.setVisible(true);
         
         back.setVisible(true);
+        m_controller.mc();
     }//GEN-LAST:event_OCActionPerformed
 
     private void BCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BCActionPerformed
@@ -639,6 +648,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
         clean_panel.setVisible(true);
         
         back.setVisible(true);
+        m_controller.mc();
     }//GEN-LAST:event_BCActionPerformed
 
     private void BPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BPActionPerformed
@@ -653,6 +663,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
        data_received_panel_unique.setVisible(false);
        clean_panel.setVisible(false);
        back.setVisible(true);
+       m_controller.mc();
     }//GEN-LAST:event_BPActionPerformed
 
     private void BGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BGActionPerformed
@@ -668,6 +679,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
         clean_panel.setVisible(true);
         
         back.setVisible(true);
+        m_controller.mc();
     }//GEN-LAST:event_BGActionPerformed
    
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
@@ -678,6 +690,8 @@ public class peripheral_manager_view extends javax.swing.JFrame
         text_area_data_sent.setText("");
         text_area_data_received.setText("");
         text_area_data_received_unique.setText("");
+        m_controller.peripheral_not_available();
+        m_controller.available_buttons();
     }//GEN-LAST:event_backActionPerformed
 
     private void clean_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clean_buttonActionPerformed
@@ -686,8 +700,16 @@ public class peripheral_manager_view extends javax.swing.JFrame
     }//GEN-LAST:event_clean_buttonActionPerformed
 
     private void refresh_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refresh_buttonActionPerformed
-        main_controller_instance.main_controller();
+        m_controller.mc();
+        text_area_data_sent.setText("");
+        text_area_data_received.setText("");
+        
     }//GEN-LAST:event_refresh_buttonActionPerformed
+
+    private void print_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_print_buttonActionPerformed
+        m_controller.setpectab("PT##?W8B#@;#T//#T//CI#T//CI#0101110112011301210122012301310132013301410142014301C#0401N02#0525A02D#0619E07E54D#0725G07G54Q#0803M02D#0906B54C04D#0B02D#0C05A54C20D#0D05F61G36D#0E18H07I54Q#0F12N20N54D#1004C16C59B#1105C64F07D#1204B59C11D#1304B64F02D#1403F54G02D#1503H54H02D#1617N02M54D#1704D54E02D#1813K02D#1935K16D#1A06H36H61D#1B35O02D#1C35P02D#1D20N011129D#1E13A15D#20BSB441041#2104N36O62H#2206I02K54D#2310I09K61Q#2403O36N61D");
+        m_controller.setpectab("CP#1C01#01W#05INK#06JHON SMITH#07LON#08#09INK 01#0B #0C12020#0D12:15#0ELON#0F01#1002#1111#12GATE#13SEAT#14DEP#15ARR#16 #17NAME#18BOARDING TIME#1930 min prior to departure#1A#1BBOARDING PASS MUST BE PRESENTED    #1CAT GATE#1D123456789#1EBOARDING PASS#20123456789#21#22#23#2401");
+    }//GEN-LAST:event_print_buttonActionPerformed
 
 
 
@@ -709,12 +731,12 @@ public class peripheral_manager_view extends javax.swing.JFrame
     private javax.swing.JPanel btp_panel;
     private javax.swing.JLabel btp_title;
     private javax.swing.JPanel buttons_panel;
-    private javax.swing.JLabel check_atb;
-    private javax.swing.JLabel check_bcr;
-    private javax.swing.JLabel check_bg;
-    private javax.swing.JLabel check_btp;
+    public javax.swing.JLabel check_atb;
+    public javax.swing.JLabel check_bcr;
+    public javax.swing.JLabel check_bg;
+    public javax.swing.JLabel check_btp;
     public static javax.swing.JLabel check_icon;
-    private javax.swing.JLabel check_ocr;
+    public javax.swing.JLabel check_ocr;
     private javax.swing.JButton clean_button;
     private javax.swing.JLabel clean_label;
     private javax.swing.JLabel clean_logo;
@@ -741,7 +763,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
     private javax.swing.JPanel ocr_panel;
     private javax.swing.JLabel ocr_title;
     public static javax.swing.JLabel parity_label;
-    private javax.swing.JButton print_button;
+    public javax.swing.JButton print_button;
     private javax.swing.JLabel print_icon;
     private javax.swing.JLabel print_label;
     private javax.swing.JPanel print_test_panel;
@@ -753,9 +775,9 @@ public class peripheral_manager_view extends javax.swing.JFrame
     private javax.swing.JLabel send_icon;
     public static javax.swing.JLabel status_label;
     public static javax.swing.JLabel stop_bits_label;
-    private javax.swing.JTextArea text_area_data_received;
+    public javax.swing.JTextArea text_area_data_received;
     private javax.swing.JTextArea text_area_data_received_unique;
-    private javax.swing.JTextArea text_area_data_sent;
-    private javax.swing.JLabel title;
+    public javax.swing.JTextArea text_area_data_sent;
+    public javax.swing.JLabel title;
     // End of variables declaration//GEN-END:variables
 }
