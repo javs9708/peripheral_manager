@@ -39,11 +39,12 @@ public class main_controller
             
             SerialPort[] ports = SerialPort.getCommPorts();
 
-        for (SerialPort serial_port : ports)
-        {  
-           String cta = peripheral_manager_view_instance.com_text_area.getText();
-           peripheral_manager_view_instance.com_text_area.setText(cta+"-"+serial_port.getSystemPortName());
-        }
+            for (SerialPort serial_port : ports)
+            {  
+               String cta = peripheral_manager_view_instance.com_text_area.getText();
+               peripheral_manager_view_instance.com_text_area.setText(cta+"-"+serial_port.getSystemPortName());
+            }
+            
             peripheral_manager_view_instance.setVisible(true);
         }
 

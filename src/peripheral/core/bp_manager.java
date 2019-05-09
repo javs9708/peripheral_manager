@@ -56,6 +56,7 @@ public class bp_manager {
               {
                 System.out.println(com_port + "=NULL NOT Present");
                 isOpenedBp = false;
+                j_comport_instance.close_port();
               }
 
               try
