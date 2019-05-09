@@ -29,14 +29,14 @@ public class main_controller
         {
             peripheral_manager_view_instance = new peripheral_manager_view(this);
             
-            bt_manager_instance = new bt_manager("COM3", "19200", "8", "1", "None", true);
+            bt_manager_instance = new bt_manager("COM7", "19200", "8", "1", "None", true);
             bp_manager_instance = new bp_manager("COM6", "19200", "8", "1", "None", true);
             bc_manager_instance = new bc_manager("COM4", "19200", "8", "1", "None", true);
             bg_manager_instance = new bg_manager("COM5", "19200", "8", "1", "None", true);
-            oc_manager_instance = new oc_manager("COM7", "19200", "8", "1", "None", true);
+            oc_manager_instance = new oc_manager("COM3", "19200", "8", "1", "None", true);
           
             available_buttons();
-            
+         
             SerialPort[] ports = SerialPort.getCommPorts();
 
             for (SerialPort serial_port : ports)

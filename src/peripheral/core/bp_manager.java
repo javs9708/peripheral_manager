@@ -2,8 +2,11 @@ package peripheral.core;
 
 import com.fazecast.jSerialComm.SerialPort;
 import peripheral.logs.debug;
+import peripheral.manager.main_controller;
 import peripheral.serial.j_com_port;
 import static peripheral.serial.j_com_port.get_comport;
+import views.peripheral_manager_view;
+import static views.peripheral_manager_view.text_area_data_received;
 
 public class bp_manager {
 
@@ -56,7 +59,6 @@ public class bp_manager {
               {
                 System.out.println(com_port + "=NULL NOT Present");
                 isOpenedBp = false;
-                j_comport_instance.close_port();
               }
 
               try
