@@ -115,6 +115,8 @@ public class peripheral_manager_view extends javax.swing.JFrame
         check_bg = new javax.swing.JLabel();
         BG = new javax.swing.JButton();
         back = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        com_text_area = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
@@ -583,6 +585,12 @@ public class peripheral_manager_view extends javax.swing.JFrame
         });
         main_panel.add(back, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 590, 60, 60));
 
+        com_text_area.setColumns(20);
+        com_text_area.setRows(5);
+        jScrollPane2.setViewportView(com_text_area);
+
+        main_panel.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 590, 150, 50));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -751,6 +759,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
     private javax.swing.JPanel clean_panel;
     private javax.swing.JButton close_button;
     private javax.swing.JLabel close_label;
+    public javax.swing.JTextArea com_text_area;
     public static javax.swing.JLabel data_bits_label;
     private javax.swing.JLabel data_received_icon;
     private javax.swing.JLabel data_received_label;
@@ -764,6 +773,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
     private javax.swing.JLabel device_details_label;
     private javax.swing.JPanel device_details_panel;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField line;
     private javax.swing.JLabel logo_ink;
     private javax.swing.JPanel main_panel;

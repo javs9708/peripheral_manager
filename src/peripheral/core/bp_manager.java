@@ -27,7 +27,6 @@ public class bp_manager {
               serial_port = get_comport(com_port);
               System.out.println(com_port + " Present");
               
-              
               if (serial_port != null)
               {
                 isOpenedBp=true;

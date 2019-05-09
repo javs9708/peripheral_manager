@@ -691,7 +691,7 @@ public class j_com_port implements SerialPortDataListener
     SerialPort[] ports = SerialPort.getCommPorts();
 
     for (SerialPort serial_port : ports)
-    {
+    {   
         System.out.println(serial_port.getSystemPortName());
       if (serial_port.getSystemPortName().equals(comport_name))
       {
