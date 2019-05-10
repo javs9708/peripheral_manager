@@ -2,12 +2,15 @@ package peripheral.manager;
 
 import com.fazecast.jSerialComm.SerialPort;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import javax.swing.ImageIcon;
 import peripheral.core.bc_manager;
 import peripheral.core.bg_manager;
 import peripheral.core.bp_manager;
 import peripheral.core.bt_manager;
 import peripheral.core.oc_manager;
+import peripheral.server.server;
 import views.peripheral_manager_view;
 
 public class main_controller 
@@ -19,22 +22,44 @@ public class main_controller
         oc_manager oc_manager_instance;
         
         peripheral_manager_view peripheral_manager_view_instance;
+        server server_instance;
         
         File fichero     = new File(".");
         
         ImageIcon red_error = new ImageIcon(fichero.getAbsolutePath()+"/build/classes/images/red_error.png");
         ImageIcon green_ok = new ImageIcon(fichero.getAbsolutePath()+"/build/classes/images/green_ok.png");
         
-        public main_controller()
+        public main_controller() throws FileNotFoundException, UnsupportedEncodingException
         {
             peripheral_manager_view_instance = new peripheral_manager_view(this);
+            server_instance                  = new server();
             
-            bt_manager_instance = new bt_manager("COM7", "19200", "8", "1", "None", true);
-            bp_manager_instance = new bp_manager("COM6", "19200", "8", "1", "None", true);
-            bc_manager_instance = new bc_manager("COM4", "19200", "8", "1", "None", true);
-            bg_manager_instance = new bg_manager("COM5", "19200", "8", "1", "None", true);
-            oc_manager_instance = new oc_manager("COM3", "19200", "8", "1", "None", true);
-          
+            
+            
+            for(int i=0; i<5;i++)
+            {
+                if(server_instance.json_com_ports[i][0].equals("bt"))
+                {
+                    bt_manager_instance = new bt_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2],server_instance.json_com_ports[i][3],server_instance.json_com_ports[i][4],server_instance.json_com_ports[i][5], Boolean.valueOf(server_instance.json_com_ports[i][6]));   
+                }
+                if(server_instance.json_com_ports[i][0].equals("bp"))
+                {
+                    bp_manager_instance = new bp_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2],server_instance.json_com_ports[i][3],server_instance.json_com_ports[i][4],server_instance.json_com_ports[i][5], Boolean.valueOf(server_instance.json_com_ports[i][6]));   
+                }
+                if(server_instance.json_com_ports[i][0].equals("bc"))
+                {
+                    bc_manager_instance = new bc_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2],server_instance.json_com_ports[i][3],server_instance.json_com_ports[i][4],server_instance.json_com_ports[i][5], Boolean.valueOf(server_instance.json_com_ports[i][6]));   
+                }
+                if(server_instance.json_com_ports[i][0].equals("bg"))
+                {
+                    bg_manager_instance = new bg_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2],server_instance.json_com_ports[i][3],server_instance.json_com_ports[i][4],server_instance.json_com_ports[i][5], Boolean.valueOf(server_instance.json_com_ports[i][6]));   
+                }
+                if(server_instance.json_com_ports[i][0].equals("oc"))
+                {
+                    oc_manager_instance = new oc_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2],server_instance.json_com_ports[i][3],server_instance.json_com_ports[i][4],server_instance.json_com_ports[i][5], Boolean.valueOf(server_instance.json_com_ports[i][6]));   
+                }              
+            }
+       
             available_buttons();
          
             SerialPort[] ports = SerialPort.getCommPorts();
