@@ -130,9 +130,10 @@ public class configuration_universal
 
   public static int          COMPORT_RAW_DATA_TIMEOUT     = 1;                                                           // Seconds
 
-  // ========== KIOSK MANAGER ERRORS
-  // PRINTER ERRORS
+  // ========== KIOSK MANAGER STATUSES
+  // PRINTER STATUSES
 
+  public static String       PRINTER_OK                   = "PRINTER_OK";
   public static String       PAPER_OUT                    = "PAPER_OUT";
   public static String       PAPER_JAM                    = "PAPER_JAM";
   public static String       COVER_OPEN                   = "COVER_OPEN";

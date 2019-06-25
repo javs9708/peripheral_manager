@@ -586,6 +586,7 @@ public class j_com_port implements SerialPortDataListener
     }
     if (com_port_opened)
     {
+      debug.set_debug("Ok, comport opened: " + com_port_name);
       return configuration_universal.DEVICE_OK;
     } else
     {
@@ -616,7 +617,7 @@ public class j_com_port implements SerialPortDataListener
             debug.set_debug(com_port_name + " - data avaiable: " + result);
           } else
           {
-            // debug.set_debug("data not avaiable");
+            debug.set_debug("data not avaiable");
           }
 
         }
@@ -630,7 +631,7 @@ public class j_com_port implements SerialPortDataListener
       debug.set_debug("serial ATP_ERR6");
       result = "ATP_ERR6";
     }
-
+    debug.set_debug("set_pectab result: " + result); 
     return result;
   }
 
@@ -716,21 +717,21 @@ public class j_com_port implements SerialPortDataListener
       while (true)
       {
         serial_port = get_comport(com_port);
-        System.out.println(com_port + " Present");
+        debug.set_debug(com_port + " Present");
 
         if (serial_port != null)
         {
           try
           {
-            System.out.println(com_port + " isOpened " + isOpened);
+            debug.set_debug(com_port + " isOpened " + isOpened);
             if (!isOpened)
             {
               boolean openedSuccessfully = serial_port.openPort();
-              System.out.println("\nOpening " + serial_port.getSystemPortName() + ": " + serial_port.getDescriptivePortName() + " - " + serial_port.getPortDescription() + ": " + openedSuccessfully);
+              debug.set_debug("\nOpening " + serial_port.getSystemPortName() + ": " + serial_port.getDescriptivePortName() + " - " + serial_port.getPortDescription() + ": " + openedSuccessfully);
               if (openedSuccessfully)
               {
                 isOpened = true;
-                System.out.println("Serial port opened.");
+                debug.set_debug("Serial port opened.");
                 serial_port.setBaudRate(9600);
 
                 if (serial_port.closePort())
@@ -740,16 +741,16 @@ public class j_com_port implements SerialPortDataListener
               }
             } else
             {
-              System.out.println(com_port + " is Open");
+              debug.set_debug(com_port + " is Open");
             }
 
           } catch (Exception e)
           {
-            System.out.println("\nSerial port NOT opened, Exception: " + e.getMessage());
+            debug.set_debug("\nSerial port NOT opened, Exception: " + e.getMessage());
           }
         } else
         {
-          System.out.println(com_port + "=NULL NOT Present");
+          debug.set_debug(com_port + "=NULL NOT Present");
           isOpened = false;
         }
 
@@ -764,7 +765,7 @@ public class j_com_port implements SerialPortDataListener
       }
     } catch (Exception e)
     {
-      System.out.println("\nWhile Exception");
+      debug.set_debug("\nWhile Exception");
       e.printStackTrace();
     }
   }

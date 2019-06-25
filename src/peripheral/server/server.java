@@ -12,6 +12,7 @@ import java.net.URL;
 
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
+import peripheral.logs.debug;
 
 public class server
 {
@@ -26,7 +27,7 @@ public class server
   String stop_bit;
   String parity;
   String is_serial_printer;
-
+  public int peripheral_counter = 0;
 
 
   public String[][] json_com_ports;
@@ -46,11 +47,11 @@ public class server
         XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
         config.setServerURL(new URL(XMLRPC_SERVER));
         client.setConfig(config);
-        System.out.println("XMLRPC Client created, Conecting to [" + XMLRPC_SERVER + "]");
+        debug.set_debug("XMLRPC Client created, Conecting to [" + XMLRPC_SERVER + "]");
       }
     } catch (Exception e)
     {
-      System.out.println("Error on connect method [" + e.toString() + "]");
+      debug.set_debug("Error on connect method [" + e.toString() + "]");
       return false;
     }
     return true;
@@ -64,7 +65,7 @@ public class server
       result = (Object[]) client.execute(method_name, params);
     } catch (Exception e)
     {
-      System.out.println("Error execute_xmlrpc method: " + method_name + " - Error message: [" + e.getMessage() + "]");
+      debug.set_debug("Error execute_xmlrpc method: " + method_name + " - Error message: [" + e.getMessage() + "]");
     }
     return result;
   }
@@ -77,7 +78,7 @@ public class server
       result = (String) client.execute(method_name, params);
     } catch (Exception e)
     {
-      System.out.println("Error execute_xmlrpc method: " + method_name + " - Error message: [" + e.getMessage() + "]");
+      debug.set_debug("Error execute_xmlrpc method: " + method_name + " - Error message: [" + e.getMessage() + "]");
     }
     return result;
   }
@@ -86,7 +87,7 @@ public class server
   {
 
 
-    System.out.println("->Get COM_PORTS");
+    debug.set_debug("->Get COM_PORTS");
     String R;
     if (this.connect() == true)
     {
@@ -98,19 +99,19 @@ public class server
         R =  this.execute_xmlrpc_string_result("get_com_ports", params);
         if (R == null)
         {
-            System.out.println("Error receiving application from inkdcs - function get_com_ports");
+            debug.set_debug("Error receiving application from inkdcs - function get_com_ports");
         } else
         {
             JsonParser parser = new JsonParser();
             JsonArray gsonArr = parser.parse(R).getAsJsonArray();
-            int c=0;
+            peripheral_counter = 0;
             for (JsonElement obj : gsonArr) 
             {
-                c++;
+                peripheral_counter++;
             }
  
             
-            json_com_ports = new String[c][7];
+            json_com_ports = new String[peripheral_counter][7];
 
             
             int i        = 0;
