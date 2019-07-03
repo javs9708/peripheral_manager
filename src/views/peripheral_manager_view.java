@@ -825,7 +825,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
   public static javax.swing.JLabel status_label;
   public static javax.swing.JLabel stop_bits_label;
   public static javax.swing.JTextArea text_area_data_received;
-  private javax.swing.JTextArea text_area_data_received_unique;
+  public javax.swing.JTextArea text_area_data_received_unique;
   public javax.swing.JTextArea text_area_data_sent;
   public javax.swing.JLabel title;
   // End of variables declaration//GEN-END:variables

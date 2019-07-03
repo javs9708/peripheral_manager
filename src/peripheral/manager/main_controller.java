@@ -24,7 +24,7 @@ public class main_controller
   bg_manager bg_manager_instance = null;
   oc_manager oc_manager_instance = null;
 
-  peripheral_manager_view peripheral_manager_view_instance;
+  public static peripheral_manager_view peripheral_manager_view_instance;
   server server_instance;
 
   File fichero = new File(".");
@@ -43,23 +43,23 @@ public class main_controller
     {
       if (server_instance.json_com_ports[i][0].equals("bt"))
       {
-        bt_manager_instance = new bt_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2], server_instance.json_com_ports[i][3], server_instance.json_com_ports[i][4], server_instance.json_com_ports[i][5], Boolean.valueOf(server_instance.json_com_ports[i][6]));
+        bt_manager_instance = new bt_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2], server_instance.json_com_ports[i][3], server_instance.json_com_ports[i][4], server_instance.json_com_ports[i][5],true);
       }
       if (server_instance.json_com_ports[i][0].equals("bp"))
       {
-        bp_manager_instance = new bp_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2], server_instance.json_com_ports[i][3], server_instance.json_com_ports[i][4], server_instance.json_com_ports[i][5], Boolean.valueOf(server_instance.json_com_ports[i][6]));
+        bp_manager_instance = new bp_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2], server_instance.json_com_ports[i][3], server_instance.json_com_ports[i][4], server_instance.json_com_ports[i][5], true);
       }
       if (server_instance.json_com_ports[i][0].equals("bc"))
       {
-        bc_manager_instance = new bc_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2], server_instance.json_com_ports[i][3], server_instance.json_com_ports[i][4], server_instance.json_com_ports[i][5], Boolean.valueOf(server_instance.json_com_ports[i][6]));
+        bc_manager_instance = new bc_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2], server_instance.json_com_ports[i][3], server_instance.json_com_ports[i][4], server_instance.json_com_ports[i][5], false);
       }
       if (server_instance.json_com_ports[i][0].equals("bg"))
       {
-        bg_manager_instance = new bg_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2], server_instance.json_com_ports[i][3], server_instance.json_com_ports[i][4], server_instance.json_com_ports[i][5], Boolean.valueOf(server_instance.json_com_ports[i][6]));
+        bg_manager_instance = new bg_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2], server_instance.json_com_ports[i][3], server_instance.json_com_ports[i][4], server_instance.json_com_ports[i][5], false);
       }
       if (server_instance.json_com_ports[i][0].equals("oc"))
       {
-        oc_manager_instance = new oc_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2], server_instance.json_com_ports[i][3], server_instance.json_com_ports[i][4], server_instance.json_com_ports[i][5], Boolean.valueOf(server_instance.json_com_ports[i][6]));
+        oc_manager_instance = new oc_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2], server_instance.json_com_ports[i][3], server_instance.json_com_ports[i][4], server_instance.json_com_ports[i][5], false);
       }
     }
 
@@ -282,7 +282,7 @@ public class main_controller
       if(peripheral_manager_view_instance != null)
       {
         String com_port_label = peripheral_manager_view_instance.COM_port_label.getText();
-        String com_port = peripheral_instance.j_comport_instance.get_com_port_name();
+        String com_port = peripheral_instance.comport_instance.get_com_port_name();
         if(!com_port_label.contains(com_port))  
         {
           force_load_details = true;
@@ -294,22 +294,22 @@ public class main_controller
       if (force_load_details)
       {
         String com_port_label = peripheral_manager_view_instance.COM_port_label.getText();
-        String com_port = peripheral_instance.j_comport_instance.get_com_port_name();
+        String com_port = peripheral_instance.comport_instance.get_com_port_name();
         peripheral_manager_view_instance.COM_port_label.setText(com_port_label + " " + com_port);
 
-        String baud_rate = peripheral_instance.j_comport_instance.get_baud_rate();
+        String baud_rate = peripheral_instance.comport_instance.get_baud_rate();
         String baud_rate_label = peripheral_manager_view_instance.baud_rate_label.getText();
         peripheral_manager_view_instance.baud_rate_label.setText(baud_rate_label + " " + baud_rate);
 
-        String data_bits = peripheral_instance.j_comport_instance.get_data_bits();
+        String data_bits = peripheral_instance.comport_instance.get_data_bits();
         String data_bits_label = peripheral_manager_view_instance.data_bits_label.getText();
         peripheral_manager_view_instance.data_bits_label.setText(data_bits_label + " " + data_bits);
 
-        String stop_bits = peripheral_instance.j_comport_instance.get_stop_bits();
+        String stop_bits = peripheral_instance.comport_instance.get_stop_bits();
         String stop_bits_label = peripheral_manager_view_instance.stop_bits_label.getText();
         peripheral_manager_view_instance.stop_bits_label.setText(stop_bits_label + " " + stop_bits);
 
-        String parity = peripheral_instance.j_comport_instance.get_parity();
+        String parity = peripheral_instance.comport_instance.get_parity();
         String parity_label = peripheral_manager_view_instance.parity_label.getText();
         peripheral_manager_view_instance.parity_label.setText(parity_label + " " + parity);
 

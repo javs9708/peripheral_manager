@@ -1,22 +1,36 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package peripheral.serial;
 
-import com.fazecast.jSerialComm.SerialPort;
-import com.fazecast.jSerialComm.SerialPortDataListener;
-import com.fazecast.jSerialComm.SerialPortEvent;
-import java.io.File;
+import gnu.io.CommPortIdentifier;
+import gnu.io.NoSuchPortException;
+import gnu.io.PortInUseException;
+import gnu.io.SerialPort;
+import gnu.io.SerialPortEvent;
+import gnu.io.SerialPortEventListener;
+//import ink_cuss_source.cuss_server;
+//import ink_cuss_source.miscellaneous.configuration_universal;
+//import ink_cuss_source.miscellaneous.debug;
+//import ink_cuss_source.miscellaneous.error_manager;
+//import ink_cuss_source.miscellaneous.helper;
+//import ink_cuss_source.other.magnetic_stripe_reader;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
+
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import peripheral.configuration.configuration_universal;
 import peripheral.logs.debug;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import javax.swing.ImageIcon;
-import views.peripheral_manager_view;
-
-public class j_com_port extends com_port implements SerialPortDataListener
+public class old_com_port extends com_port implements SerialPortEventListener
 {
-  
   SerialPort             serial_port;
   boolean                baud_rate_exist;
   boolean                data_bits_exist;
@@ -47,12 +61,11 @@ public class j_com_port extends com_port implements SerialPortDataListener
 
   private String         actual_error      = "";
   private String         last_error      = "";
-  private String         last_error2      = "";
 
   private boolean        paper_low_bt      = false;
   private boolean        paper_low_bp      = false;
 
-  public j_com_port()
+  public old_com_port()
   {
     baud_rate_exist = true;
     data_bits_exist = true;
@@ -78,7 +91,28 @@ public class j_com_port extends com_port implements SerialPortDataListener
    */
   public void set_actual_error(String error)
   {
-	  debug.set_debug(error);
+    actual_error = error;
+    
+    if(!actual_error.equals("") && !actual_error.equals(last_error))
+    {
+      last_error = actual_error;
+      if(com_port_name.equals("COM3"))
+      {
+        debug.set_debug("BT ERROR: " + actual_error);
+      }
+      if(com_port_name.equals("COM5"))
+      {
+        debug.set_debug("BCR ERROR: " + actual_error);
+      }
+      if(com_port_name.equals("COM6"))
+      {
+        debug.set_debug("Door Sensor ERROR: " + actual_error);
+      }
+      if(com_port_name.equals("COM7"))
+      {
+        debug.set_debug("SCALE ERROR: " + actual_error);
+      }
+    }
     
   }
 
@@ -165,22 +199,19 @@ public class j_com_port extends com_port implements SerialPortDataListener
   {
 
     // Set parameters
-    this.com_port_name     = com_port_name;
-    this.baud_rate         = baud_rate;
-    this.data_bits         = data_bits;
-    this.stop_bits         = stop_bits;
-    this.parity            = parity;
+    this.com_port_name = com_port_name;
+    this.baud_rate = baud_rate;
+    this.data_bits = data_bits;
+    this.stop_bits = stop_bits;
+    this.parity = parity;
     this.is_serial_printer = is_serial_printer;
- 
 
     parameters = "String com_port_name: " + com_port_name + ", String baud_rate: " + baud_rate + ", String data_bits: " + data_bits + ", String stop_bits: " + stop_bits + ", String parity: " + parity;
     response = "";
     this.app_token = "";
 
-    
     if (com_port_opened == false)
     {
-     
       try
       {
         baud_rate.replaceAll("\\s{0,}", "");
@@ -188,24 +219,11 @@ public class j_com_port extends com_port implements SerialPortDataListener
         data_bits.replaceAll("\\s{0,}", "");
         stop_bits.replaceAll("\\s{0,}", "");
         com_port_name.replaceAll("\\s{0,}", "");
-
-        serial_port = get_comport(com_port_name);
-
-        if (serial_port == null)
-        {
-          debug.set_debug("Serial port [" + com_port_name + "] Not visible");
-          set_actual_error("Serial port [" + com_port_name + "] Not visible");
-          return false;
-        }
-
-        boolean openedSuccessfully = serial_port.openPort();
-        debug.set_debug("Opening " + serial_port.getSystemPortName() + ": " + serial_port.getDescriptivePortName() + " - " + serial_port.getPortDescription() + ": " + openedSuccessfully);
-        if (!openedSuccessfully)
-        {
-          debug.set_debug("The serial port [" + com_port_name + "] can not be opened");
-          set_actual_error("The serial port [" + com_port_name + "] can not be opened");
-          return false;
-        }
+        
+        CommPortIdentifier portId = get_comport_identifier(com_port_name);
+        
+        debug.set_debug(com_port_name + " Owner: " + portId.getCurrentOwner());
+        serial_port = (SerialPort) portId.open("", 5000);
 
         if (baud_rate.equals("110") || baud_rate.equals("115200") || baud_rate.equals("1200") || baud_rate.equals("19200") || baud_rate.equals("2400") || baud_rate.equals("300") || baud_rate.equals("38400") || baud_rate.equals("4800") || baud_rate.equals("57600") || baud_rate.equals("600") || baud_rate.equals("9600"))
         {
@@ -218,11 +236,15 @@ public class j_com_port extends com_port implements SerialPortDataListener
         }
 
         int serial_port_data_bits;
-        if (data_bits.equals("5") || data_bits.equals("6") || data_bits.equals("7") || data_bits.equals("8"))
-        {
-          this.data_bits_exist = true;
-          serial_port_data_bits = Integer.parseInt(data_bits);
-        } else
+        if (data_bits.equals("5"))
+          serial_port_data_bits = SerialPort.DATABITS_5;
+        else if (data_bits.equals("6"))
+          serial_port_data_bits = SerialPort.DATABITS_6;
+        else if (data_bits.equals("7"))
+          serial_port_data_bits = SerialPort.DATABITS_7;
+        else if (data_bits.equals("8"))
+          serial_port_data_bits = SerialPort.DATABITS_8;
+        else
         {
           this.data_bits_exist = false;
           set_actual_error("databits not available -> [" + data_bits + "]");
@@ -231,11 +253,11 @@ public class j_com_port extends com_port implements SerialPortDataListener
 
         int serial_port_stop_bits;
         if (stop_bits.equals("1"))
-          serial_port_stop_bits = SerialPort.ONE_STOP_BIT;
+          serial_port_stop_bits = SerialPort.STOPBITS_1;
         else if (stop_bits.equals("1.5"))
-          serial_port_stop_bits = SerialPort.ONE_POINT_FIVE_STOP_BITS;
+          serial_port_stop_bits = SerialPort.STOPBITS_1_5;
         else if (stop_bits.equals("2"))
-          serial_port_stop_bits = SerialPort.TWO_STOP_BITS;
+          serial_port_stop_bits = SerialPort.STOPBITS_2;
         else
         {
           this.stop_bits_exist = false;
@@ -245,35 +267,31 @@ public class j_com_port extends com_port implements SerialPortDataListener
 
         int serial_port_parity;
         if (parity.toUpperCase().equals("EVEN"))
-          serial_port_parity = SerialPort.EVEN_PARITY;
+          serial_port_parity = SerialPort.PARITY_EVEN;
         else if (parity.toUpperCase().equals("MARK"))
-          serial_port_parity = SerialPort.MARK_PARITY;
+          serial_port_parity = SerialPort.PARITY_MARK;
         else if (parity.toUpperCase().equals("NONE"))
-          serial_port_parity = SerialPort.NO_PARITY;
+          serial_port_parity = SerialPort.PARITY_NONE;
         else if (parity.toUpperCase().equals("ODD"))
-          serial_port_parity = SerialPort.ODD_PARITY;
+          serial_port_parity = SerialPort.PARITY_ODD;
         else if (parity.toUpperCase().equals("SPACE"))
-          serial_port_parity = SerialPort.SPACE_PARITY;
+          serial_port_parity = SerialPort.PARITY_SPACE;
         else
         {
           this.parity_exist = false;
           set_actual_error("parity not available -> [" + parity + "]");
           return false;
         }
-        
-        if (!serial_port.isOpen())
-        {
-          debug.set_debug("The serial port [" + com_port_name + "] is not open");
-          return false;
-        }
-        
-        serial_port.setComPortParameters(Integer.parseInt(baud_rate), serial_port_data_bits, serial_port_stop_bits, serial_port_parity);
-        serial_port.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+
+        serial_port.setSerialPortParams(Integer.parseInt(baud_rate), serial_port_data_bits, serial_port_stop_bits, serial_port_parity);
+        serial_port.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
         outStream = serial_port.getOutputStream();
-        inStream  = serial_port.getInputStream();
+        inStream = serial_port.getInputStream();
 
-        serial_port.addDataListener(this);
+        serial_port.addEventListener(this);
+        serial_port.notifyOnDataAvailable(true);
 
+        debug.set_debug("Connected to [" + com_port_name + "]");
         com_port_opened = true;
       } catch (Exception e)
       {
@@ -291,43 +309,46 @@ public class j_com_port extends com_port implements SerialPortDataListener
   @Override
   public void close_port()
   {
-    parameters = "";
-    response = "";
-    this.app_token = "";
+//    try
+//    {
+      parameters = "";
+      response = "";
+      this.app_token = "";
 
-    if (serial_port != null)
-    {
-      try
-      {
-        outStream.close();
-        inStream.close();
-      } catch (Exception ex)
-      {
 
-        debug.set_debug("Exception can't close port - " + ex.getMessage());
+//      CommPortIdentifier portId = get_comport_identifier(com_port_name);
+      debug.set_debug("close_port " + com_port_name);
+//      if (portId != null && serial_port != null)
+      if (serial_port != null)
+      {
+        try
+        {
+          outStream.close();
+          inStream.close();
+        } catch (Exception ex)
+        {
+
+          debug.set_debug("Exception can't close port - " + ex.getMessage());
+        }
+        serial_port.close();
+        serial_port = null;
       }
-      serial_port.closePort();
-      serial_port = null;
-      com_port_opened = false;
-    }
+    /*}
+    catch(Exception e)
+    {
+      debug.set_debug("Exception can't close serial port - " + e.getMessage(), app_token, configuration_universal.LOG_TYPE_ERROR, error_manager.COMPORT_ERROR_CONNECTION);
+    }*/
   }
 
-  @Override
-  public int getListeningEvents()
-  {
-    return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
-  }
-
-  @Override
-  public void serialEvent(SerialPortEvent event)
+  public void serialEvent(SerialPortEvent events)
   {
     parameters = "SerialPortEvent events";
     response = "";
     this.app_token = "";
 
-    switch (event.getEventType()) {
-      case SerialPort.LISTENING_EVENT_DATA_AVAILABLE:
-        debug.set_debug(this.com_port_name + " read_serial DATA_AVAILABLE ");
+    switch (events.getEventType()) {
+      case SerialPortEvent.DATA_AVAILABLE:
+        debug.set_debug(this.com_port_name+" read_serial DATA_AVAILABLE ");
         read_serial();
         break;
     }
@@ -366,25 +387,31 @@ public class j_com_port extends com_port implements SerialPortDataListener
   public void read_serial()
   {
     /*
-     * parameters = ""; response = ""; this.app_token = ""; debug.set_debug(app_token,"start",parameters,response); boolean is_credit_card = false;
+     * parameters = ""; response = ""; this.app_token = "";
+     * 
+     * debug.set_debug(app_token,"start",parameters,response);
+     * 
+     * boolean is_credit_card = false;
      */
     try
     {
       int availableBytes = inStream.available();
-      debug.set_debug(this.com_port_name + " read_serial availableBytes " + availableBytes);
-
+      debug.set_debug(this.com_port_name+" read_serial availableBytes "+availableBytes);
+      
       if (availableBytes > 0)
       {
         inStream.read(readBuffer, 0, availableBytes);
 
         String new_string = new String(readBuffer, 0, availableBytes);
-        debug.set_debug(this.com_port_name + " read_serial new_string " + new_string);
+        new_string = clean_read_string(new_string);
+        debug.set_debug(this.com_port_name+" read_serial new_string " + new_string);
 
         if (is_serial_printer)
         {
           char STX = '\2'; // START STRING
-          String weird_start_PA_printer_1 = "�";
-          if (new_string.startsWith(STX + "") || new_string.startsWith(weird_start_PA_printer_1))
+          char ETX = '\3'; // END STRING
+          String weird_start_PA_printer_1 = "Œ";
+          if (new_string.startsWith(ETX + STX + "") || new_string.startsWith(STX + "") || new_string.startsWith(weird_start_PA_printer_1))
           {
             data = new_string;
           } else
@@ -399,26 +426,36 @@ public class j_com_port extends com_port implements SerialPortDataListener
           }
         } else
         {
-        
-          
-        data = data + new_string;
-          
-          
+            data = data + new_string;
         }
 
-        // cuss_server.magnetic_stripe_reader_instance.set_and_format_comport_data(data);
+        
 
-        /*
-         * if(configuration_universal.SHOW_MSR_STRING) debug.set_debug(app_token, "String read: "+string_var,parameters,response); else { String var_to_show = string_var.replaceAll(".", "*"); debug.set_debug(app_token ,"String read: "+var_to_show,parameters,response); } if(track_1.equals("")) {
-         * boolean quit_garbage = false; if(string_var.contains("%B")) is_credit_card = true; for(int i = 1; i < string_var.length(); i++) { if(string_var.substring(0, i).contains("% ") || string_var.substring(0, i).contains("%B")) { string_var = string_var.substring(i); i = string_var.length();
-         * quit_garbage = true; } } if(!quit_garbage) string_var = ""; track_1 = string_var; } else { if(track_1.equals("")) { for( int i = 1; i < string_var.length(); i++) { if(string_var.substring(0,i).contains("?")) { track_1 = string_var.substring(i); string_var = string_var.substring(0, i-1);
-         * if(is_credit_card) string_var = string_var.replaceAll("[^0-9]", ""); i = string_var.length(); } } track_1 = track_1 + string_var; track_1 = track_1.replaceAll("[^0-9=]", ""); } } if(configuration_universal.SHOW_MSR_STRING) { debug.set_debug(app_token
-         * ,"Final string 1: ["+track_1+"]",parameters,response); debug.set_debug (app_token,"Final string 2: ["+track_1+"]",parameters,response); } else { String var_to_show = track_1.replaceAll(".", "*"); debug.set_debug (app_token,"Final string: "+var_to_show,parameters,response); }
-         */
+        
       }
     } catch (Exception e)
     {
       debug.set_debug("Error receiving data  :[" + e.getMessage() + "]");
+      this.recover_serial_port();
+    }
+    debug.set_debug("end");
+  }
+  
+  
+  public void recover_serial_port()
+  {
+    try
+    {
+      this.close_port();
+      
+      CommPortIdentifier portId = get_comport_identifier(this.com_port_name);
+      
+      debug.set_debug(this.com_port_name + " Owner: " + portId.getCurrentOwner());
+      serial_port = (SerialPort) portId.open("", 5000);
+    }
+    catch (PortInUseException ex)
+    {
+      set_actual_error("Error opening serial port in write_raw_data [" + com_port_name + "] Exception: " + ex.getMessage());
     }
   }
 
@@ -433,14 +470,18 @@ public class j_com_port extends com_port implements SerialPortDataListener
 
     if (serial_port != null)
     {
-      result = serial_port.getCTS();
-      debug.set_debug(this.com_port_name + " getCTS: " + result);
+      result = serial_port.isCTS();
+      debug.set_debug("isCTS: " + result);
     }
 
     if (!result)
     {
       set_actual_error("CTS false");
-      debug.set_debug(this.com_port_name + " CTS false. com_port_opened: " + this.com_port_opened + ". (serial_port != null) " + (serial_port != null));
+      debug.set_debug(this.com_port_name+" CTS false. com_port_opened: "+this.com_port_opened+". (serial_port != null) "+(serial_port != null));
+      if (serial_port != null)
+      {
+        this.recover_serial_port();
+      }
     }
 
     return result;
@@ -449,15 +490,16 @@ public class j_com_port extends com_port implements SerialPortDataListener
   @Override
   public boolean isDSR()
   {
-    parameters     = "";
-    response       = "";
+
+    parameters = "";
+    response = "";
     this.app_token = "";
     boolean result = false;
 
     if (serial_port != null)
     {
-      result = serial_port.getDSR();
-      debug.set_debug(this.com_port_name + " getDSR: " + result);
+      result = serial_port.isDSR();
+      debug.set_debug("isDSR: " + result);
     }
     return result;
   }
@@ -465,31 +507,29 @@ public class j_com_port extends com_port implements SerialPortDataListener
   @Override
   public boolean set_dtr()
   {
-    parameters     = "";
-    response       = "boolean: true";
+    parameters = "";
+    response = "boolean: true";
     this.app_token = "";
-    boolean result = false;
     
-    if(serial_port != null && is_open() == configuration_universal.DEVICE_OK);
+    if(serial_port != null && is_open() == configuration_universal.DEVICE_OK)
     {
-      result = serial_port.setDTR();
+      serial_port.setDTR(true);
     }
-    return result;
+    return true;
   }
- 
+
   @Override
   public boolean set_rts()
   {
-    parameters     = "";
-    response       = "boolean: true";
+    parameters = "";
+    response = "boolean: true";
     this.app_token = "";
-    boolean result = false;
 
-    if(serial_port != null && is_open() == configuration_universal.DEVICE_OK)
+    if (serial_port != null && is_open() == configuration_universal.DEVICE_OK)
     {
-      result = serial_port.setRTS();
+      serial_port.setRTS(true);
     }
-    return result;
+    return true;
   }
 
   private boolean write_data(String data)
@@ -497,20 +537,20 @@ public class j_com_port extends com_port implements SerialPortDataListener
     parameters = "";
     response = "";
     this.app_token = "";
+    
 
     char STX = '\2';
     char ETX = '\3';
     data = STX + data + ETX;
-    debug.set_debug(com_port_name + " - pectab[" + data + "]");
+    debug.set_debug(com_port_name + " - data[" + data + "]");
 
     try
     {
       outStream.write(data.getBytes());
+      
       return true;
     } catch (Exception ex)
     {
-      System.err.println(ex.getMessage());
-      debug.set_debug("Error: " + ex.getMessage());
       set_actual_error(ex.getMessage());
       return false;
     }
@@ -521,22 +561,20 @@ public class j_com_port extends com_port implements SerialPortDataListener
     parameters = "";
     response = "";
     this.app_token = "";
-    debug.set_debug("write_raw_data data " + data + ". COMPORT_NAME: " + this.com_port_name);
+    
+    debug.set_debug("write_raw_data data "+data+". COMPORT_NAME: "+this.com_port_name);
     try
     {
-      debug.set_debug("com_port_opened: " + com_port_opened);
-      debug.set_debug("write_raw_data isCTS? " + serial_port.getCTS());
-      debug.set_debug("write_raw_data serial_port NULL? " + (serial_port == null) + ". serial_port Open "+serial_port.isOpen());
-      debug.set_debug("write_raw_data outStream NULL? " + (outStream == null));
-      
-      com_port_opened = serial_port.isOpen();
       outStream.write(data.getBytes());
-      return true;
-    } catch (IOException ex)
-    {
       
-      debug.set_debug("Error IOException: " + ex.getMessage());
-
+      return true;
+    } catch (Exception ex)
+    {
+      System.err.println(ex.getMessage());
+      debug.set_debug("Error: " + ex.getMessage());
+      
+      this.recover_serial_port();
+      
       return false;
     }
   }
@@ -546,6 +584,7 @@ public class j_com_port extends com_port implements SerialPortDataListener
     parameters = "";
     response = "boolean: " + this.baud_rate_exist;
     this.app_token = "";
+    
 
     return this.baud_rate_exist;
   }
@@ -555,6 +594,7 @@ public class j_com_port extends com_port implements SerialPortDataListener
     parameters = "";
     response = "boolean: " + this.parity_exist;
     this.app_token = "";
+    
 
     return this.parity_exist;
   }
@@ -564,6 +604,7 @@ public class j_com_port extends com_port implements SerialPortDataListener
     parameters = "";
     response = "boolean: " + this.data_bits_exist;
     this.app_token = "";
+    
 
     return this.data_bits_exist;
   }
@@ -573,6 +614,7 @@ public class j_com_port extends com_port implements SerialPortDataListener
     parameters = "";
     response = "boolean: " + this.stop_bits_exist;
     this.app_token = "";
+    
 
     return this.stop_bits_exist;
   }
@@ -582,10 +624,47 @@ public class j_com_port extends com_port implements SerialPortDataListener
     parameters = "";
     response = "boolean: " + this.com_port_exist;
     this.app_token = "";
+    
 
     return this.com_port_exist;
   }
 
+
+  
+  
+  /*public void restart_serial_port_properties(int attempt)
+  {
+    try
+    {
+      debug.set_debug("attempt: " + attempt);
+      if (attempt == 1)
+      {
+        serial_port.addEventListener(this);
+        /*serial_port = null;
+        com_port_opened = false;
+        open_port(com_port_name, baud_rate, data_bits, stop_bits, parity, is_serial_printer);*/
+      /*}
+      else if (attempt == 2)
+      {
+        serial_port.addEventListener(this);
+        serial_port.notifyOnDataAvailable(true);
+        /*this.close_port();
+        com_port_opened = false;
+        open_port(com_port_name, baud_rate, data_bits, stop_bits, parity, is_serial_printer);*/
+      /*}
+      else if (attempt == 3)
+      {
+        serial_port.removeEventListener();
+        serial_port.addEventListener(this);
+        serial_port.notifyOnDataAvailable(true);
+//        this.recover_serial_port();
+      }
+    }
+    catch (Exception e)
+    {
+      debug.set_debug("restart_serial_port_properties Exception: "+e.getMessage());
+    }
+  }*/
 
   @Override
   public int is_open()
@@ -598,14 +677,14 @@ public class j_com_port extends com_port implements SerialPortDataListener
       if (!com_port_name.equals("") && !baud_rate.equals("") && !data_bits.equals("") && !stop_bits.equals("") && !parity.equals(""))
       {
         open_port(com_port_name, baud_rate, data_bits, stop_bits, parity, is_serial_printer);
-      } else
+      }
+      else
       {
         debug.set_debug("Parameters incomplete: com_port_name: " + com_port_name + ", baud_rate " + baud_rate + ", data_bits: " + data_bits + ", stop_bits: " + stop_bits + ", parity: " + parity);
       }
     }
     if (com_port_opened)
     {
-      debug.set_debug("Ok, comport opened: " + com_port_name);
       return configuration_universal.DEVICE_OK;
     } else
     {
@@ -617,14 +696,16 @@ public class j_com_port extends com_port implements SerialPortDataListener
   @Override
   public String set_pectab(String pectab)
   {
-
+    debug.set_debug("set_pectab: " + pectab);
     String result = "";
     if (this.write_data(pectab))
     {
+      debug.set_debug("Writed");
       boolean data_available = false;
       int i = 0;
       try
       {
+        debug.set_debug("Before while");
         while (!data_available && i++ < configuration_universal.WAIT_FOR_SERIAL_DATA_ANSWER * 10)
         {
           Thread.sleep(100);
@@ -637,12 +718,14 @@ public class j_com_port extends com_port implements SerialPortDataListener
             debug.set_debug(com_port_name + " - data avaiable: " + result);
           } else
           {
-            debug.set_debug("data not avaiable");
+            // debug.set_debug("data not avaiable");
           }
 
         }
+        debug.set_debug("After while");
       } catch (InterruptedException e)
       {
+        debug.set_debug("Catch set pectab: " + e.getMessage());
         e.printStackTrace();
       }
 
@@ -651,7 +734,7 @@ public class j_com_port extends com_port implements SerialPortDataListener
       debug.set_debug("serial ATP_ERR6");
       result = "ATP_ERR6";
     }
-    debug.set_debug("set_pectab result: " + result); 
+
     return result;
   }
 
@@ -667,7 +750,7 @@ public class j_com_port extends com_port implements SerialPortDataListener
         while (!data_available && i++ < configuration_universal.COMPORT_RAW_DATA_TIMEOUT * 10)
         {
           Thread.sleep(100);
-          debug.set_debug("send_raw_with_answer get_available_data():" + get_available_data());
+          debug.set_debug("send_raw_with_answer get_available_data():"+get_available_data());
           if (!get_available_data().equals(""))
           {
             data_available = true;
@@ -684,6 +767,7 @@ public class j_com_port extends com_port implements SerialPortDataListener
       {
         e.printStackTrace();
       }
+
     } else
     {
       debug.set_debug("ERROR_WRITE_DATA");
@@ -706,94 +790,143 @@ public class j_com_port extends com_port implements SerialPortDataListener
   {
     return false;
   }
-
-  public static SerialPort get_comport(String comport_name)
+  
+  public static CommPortIdentifier get_comport_identifier(String comport_name)
   {
-    SerialPort[] ports = SerialPort.getCommPorts();
+    Enumeration portList = CommPortIdentifier.getPortIdentifiers();
 
-    for (SerialPort serial_port : ports)
-    {   
-      if (serial_port.getSystemPortName().equals(comport_name))
+    while (portList.hasMoreElements())
+    {
+      CommPortIdentifier portId = (CommPortIdentifier) portList.nextElement();
+      if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL)
       {
-        debug.set_debug(comport_name + " Present");
-        return serial_port;
+        if(portId.getName().equals(comport_name))
+        {
+          debug.set_debug(comport_name + " Present");
+          return portId;
+        }
+        
       }
     }
     debug.set_debug(comport_name + " NOT Present");
-
     return null;
   }
   
-  
   public static void main(String[] args)
   {
-    j_com_port jc = new j_com_port();
-    boolean answer = jc.open_port("COM5", "9600", "8", "1", "NONE", true);
+    old_com_port comport_instance = new old_com_port();
+    
+    boolean answer = comport_instance.open_port("COM5", "9600", "8", "1", "NONE", false);
+    comport_instance.set_dtr();
+    comport_instance.set_rts();
     debug.set_debug("answer: " + answer);
-  }
-  
-  public static void main1SDF(String[] args)
-  {
-    try
+    
+    while (true)
     {
-      SerialPort serial_port = null;
-      String com_port = "COM5";
-      boolean isOpened = false;
-
-      while (true)
+      try
       {
-        serial_port = get_comport(com_port);
-        debug.set_debug(com_port + " Present");
-
-        if (serial_port != null)
+        if (comport_instance.is_open() == configuration_universal.DEVICE_OK)
         {
-          try
+          String data = comport_instance.get_available_data();
+          if (!data.equals(""))
           {
-            debug.set_debug(com_port + " isOpened " + isOpened);
-            if (!isOpened)
-            {
-              boolean openedSuccessfully = serial_port.openPort();
-              debug.set_debug("\nOpening " + serial_port.getSystemPortName() + ": " + serial_port.getDescriptivePortName() + " - " + serial_port.getPortDescription() + ": " + openedSuccessfully);
-              if (openedSuccessfully)
-              {
-                isOpened = true;
-                debug.set_debug("Serial port opened.");
-                serial_port.setBaudRate(9600);
-
-                if (serial_port.closePort())
-                {
-                  isOpened = false;
-                }
-              }
-            } else
-            {
-              debug.set_debug(com_port + " is Open");
-            }
-
-          } catch (Exception e)
-          {
-            debug.set_debug("\nSerial port NOT opened, Exception: " + e.getMessage());
+            debug.set_debug("data: " + data);
+            comport_instance.clean();
           }
-        } else
-        {
-          debug.set_debug(com_port + "=NULL NOT Present");
-          isOpened = false;
         }
-
-        try
+        else
         {
-          Thread.sleep(2000);
-        } catch (InterruptedException e)
-        {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+          comport_instance.close_port();
+          comport_instance.open_port("COM5", "9600", "8", "1", "NONE", false);
+          
+          comport_instance.set_dtr();
+          comport_instance.set_rts();
+          
+          comport_instance.isDSR();
         }
+        Thread.sleep(2000);
       }
-    } catch (Exception e)
-    {
-      debug.set_debug("\nWhile Exception");
-      e.printStackTrace();
+      catch (InterruptedException ex)
+      {
+        debug.set_debug(ex.getMessage());
+      }
     }
+//    SerialPort serial_port = null;
+//    while (true)
+//    {
+//      
+//      CommPortIdentifier portId = null;
+//      try
+//      {
+//        portId = CommPortIdentifier.getPortIdentifier("COM5"); //get_comport_identifier("COM3");
+//        debug.set_debug("COM5 Present");
+//      } catch (NoSuchPortException e1)
+//      {
+//        debug.set_debug("COM5 NOT Present: "  + e1.getMessage());
+//      }
+//      
+//      
+//      if (portId != null && !portId.isCurrentlyOwned())
+//      {
+//        try
+//        {
+//
+//          serial_port = (SerialPort) portId.open("", 5000);
+//          debug.set_debug("Serial port opened.");
+//          serial_port.close();
+//        } catch (PortInUseException e)
+//        {
+//          try
+//          {
+//            serial_port.removeEventListener();
+//            serial_port.close();
+//            
+//          } catch (Exception e2)
+//          {
+//            debug.set_debug("Serial port NOT closed, Exception: " + e.getMessage());
+//          }
+//
+//          debug.set_debug("Serial port NOT opened, Exception: " + e.getMessage());
+//        }
+//      }
+//      else
+//      {
+//        if(portId.isCurrentlyOwned())
+//        {
+//          debug.set_debug("Serial port already owned by " + portId.getCurrentOwner());
+//        }
+//      }
+//
+//      try
+//      {
+//        Thread.sleep(2000);
+//      } catch (InterruptedException e)
+//      {
+//        // TODO Auto-generated catch block
+//        e.printStackTrace();
+//      }
+//    }
   }
 
+  public String clean_read_string(String read_string)
+  {
+    char STX = '\2'; // START STRING
+    char ETX = '\3'; // START STRING
+    char FS = (char) 0x1C; // START STRING
+    char GS = (char) 0x1D; // START STRING
+    char DLE = (char) 0x10; // START STRING
+    char CR = (char) 0x0D; // START STRING
+    char LF = (char) 0x0A; // START STRING
+    
+    
+    read_string = read_string.replace(""+STX, "");
+    read_string = read_string.replace(""+ETX, "");
+    read_string = read_string.replace(""+FS, "");
+    read_string = read_string.replace(""+GS, "");
+    read_string = read_string.replace(""+LF, "");
+    read_string = read_string.replace(""+DLE, "");
+    read_string = read_string.replace(""+CR, "\n");
+    
+    return read_string;
+  }
 }

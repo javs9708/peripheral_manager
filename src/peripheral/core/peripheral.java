@@ -7,7 +7,9 @@ package peripheral.core;
 
 import peripheral.configuration.configuration_universal;
 import peripheral.logs.debug;
+import peripheral.serial.com_port;
 import peripheral.serial.j_com_port;
+import peripheral.serial.old_com_port;
 
 /**
  *
@@ -19,9 +21,10 @@ public class peripheral
   public String com_port_name, baud_rate, data_bits, stop_bits, parity;
   public boolean is_serial_printer;
   public String var_last_status = "";
-  public j_com_port j_comport_instance;
+  public com_port comport_instance;
+  private boolean use_old_comport_library = false;
 
-  public peripheral(String com_port_name, String baud_rate, String data_bits, String stop_bits, String parity, boolean is_serial_printer)
+  public peripheral(String com_port_name, String baud_rate, String data_bits, String stop_bits, String parity, boolean is_serial_printer, boolean use_old_comport_library)
   {
     this.com_port_name = com_port_name;
     this.baud_rate = baud_rate;
@@ -29,15 +32,22 @@ public class peripheral
     this.stop_bits = stop_bits;
     this.parity = parity;
     this.is_serial_printer = is_serial_printer;
-
+    this.use_old_comport_library = use_old_comport_library;
     start_comport();
-
   }
 
   public void start_comport()
   {
-    j_comport_instance = new j_com_port();
-    j_comport_instance.open_port(com_port_name, baud_rate, data_bits, stop_bits, parity, is_serial_printer);
+    if(use_old_comport_library)
+    {
+      comport_instance = new old_com_port();
+      comport_instance.open_port(com_port_name, baud_rate, data_bits, stop_bits, parity, is_serial_printer);
+    }
+    else
+    {
+      comport_instance = new j_com_port();
+      comport_instance.open_port(com_port_name, baud_rate, data_bits, stop_bits, parity, is_serial_printer);
+    }
   }
 
   protected boolean is_status_ok()
@@ -54,7 +64,7 @@ public class peripheral
     {
       waiting_for_is_available = true;
 
-      if (j_comport_instance.is_open() == configuration_universal.DEVICE_OK && is_status_ok() && j_comport_instance.isCTS() && j_comport_instance.isDSR())
+      if (comport_instance.is_open() == configuration_universal.DEVICE_OK && is_status_ok() && comport_instance.isCTS() && comport_instance.isDSR())
       {
         waiting_for_is_available = false;
         last_available_answer = true;
@@ -62,8 +72,9 @@ public class peripheral
       }
       else
       {
-        j_comport_instance.close_port();
-        j_comport_instance.open_port(com_port_name, baud_rate, data_bits, stop_bits, parity, is_serial_printer);
+        comport_instance.close_port();
+        comport_instance.open_port(com_port_name, baud_rate, data_bits, stop_bits, parity, is_serial_printer);
+       
         waiting_for_is_available = false;
         last_available_answer = false;
         return false;
@@ -78,6 +89,6 @@ public class peripheral
 
   public String send_pectab(String pectab)
   {
-    return j_comport_instance.set_pectab(pectab);
+    return comport_instance.set_pectab(pectab);
   }
 }

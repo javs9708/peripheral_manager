@@ -11,7 +11,7 @@ public class bp_manager extends peripheral
 
   public bp_manager(String com_port_name, String baud_rate, String data_bits, String stop_bits, String parity, boolean is_serial_printer)
   {
-    super(com_port_name, baud_rate, data_bits, stop_bits, parity, is_serial_printer);
+    super(com_port_name, baud_rate, data_bits, stop_bits, parity, is_serial_printer, false);
   }
 
 
@@ -25,7 +25,7 @@ public class bp_manager extends peripheral
     if (waiting_for_status == false)
     {
       waiting_for_status = true;
-      String[] answer = j_comport_instance.set_pectab("QS").split(";");
+      String[] answer = comport_instance.set_pectab("QS").split(";");
 
       if (answer.length >= 6)
       {
