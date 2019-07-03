@@ -62,7 +62,7 @@ public class oc_manager extends peripheral
     {
       waiting_for_is_available = true;
 
-      if (comport_instance.is_open() == configuration_universal.DEVICE_OK && is_status_ok() && comport_instance.isCTS())//comport_instance.isDSR() && )
+      if (comport_instance.is_open() == configuration_universal.DEVICE_OK && is_status_ok() && comport_instance.isCTS() && comport_instance.isDSR())
       {
         
         waiting_for_is_available = false;
@@ -71,10 +71,6 @@ public class oc_manager extends peripheral
       }
       else
       {
-        comport_instance.close_port();
-        comport_instance.open_port(com_port_name, baud_rate, data_bits, stop_bits, parity, is_serial_printer);
-        comport_instance.set_dtr();
-        comport_instance.set_rts();
         waiting_for_is_available = false;
         last_available_answer = false;
         return false;

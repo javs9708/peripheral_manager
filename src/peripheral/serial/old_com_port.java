@@ -6,7 +6,6 @@
 package peripheral.serial;
 
 import gnu.io.CommPortIdentifier;
-import gnu.io.NoSuchPortException;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
@@ -20,12 +19,8 @@ import gnu.io.SerialPortEventListener;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Enumeration;
 
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import peripheral.configuration.configuration_universal;
 import peripheral.logs.debug;
 
@@ -825,7 +820,7 @@ public class old_com_port extends com_port implements SerialPortEventListener
     {
       try
       {
-        if (comport_instance.is_open() == configuration_universal.DEVICE_OK)
+        if (comport_instance.is_open() == configuration_universal.DEVICE_OK && comport_instance.isDSR() && comport_instance.isCTS())
         {
           String data = comport_instance.get_available_data();
           if (!data.equals(""))
@@ -834,16 +829,6 @@ public class old_com_port extends com_port implements SerialPortEventListener
             comport_instance.clean();
           }
         }
-        else
-        {
-          comport_instance.close_port();
-          comport_instance.open_port("COM5", "9600", "8", "1", "NONE", false);
-          
-          comport_instance.set_dtr();
-          comport_instance.set_rts();
-          
-          comport_instance.isDSR();
-        }
         Thread.sleep(2000);
       }
       catch (InterruptedException ex)
@@ -851,61 +836,7 @@ public class old_com_port extends com_port implements SerialPortEventListener
         debug.set_debug(ex.getMessage());
       }
     }
-//    SerialPort serial_port = null;
-//    while (true)
-//    {
-//      
-//      CommPortIdentifier portId = null;
-//      try
-//      {
-//        portId = CommPortIdentifier.getPortIdentifier("COM5"); //get_comport_identifier("COM3");
-//        debug.set_debug("COM5 Present");
-//      } catch (NoSuchPortException e1)
-//      {
-//        debug.set_debug("COM5 NOT Present: "  + e1.getMessage());
-//      }
-//      
-//      
-//      if (portId != null && !portId.isCurrentlyOwned())
-//      {
-//        try
-//        {
-//
-//          serial_port = (SerialPort) portId.open("", 5000);
-//          debug.set_debug("Serial port opened.");
-//          serial_port.close();
-//        } catch (PortInUseException e)
-//        {
-//          try
-//          {
-//            serial_port.removeEventListener();
-//            serial_port.close();
-//            
-//          } catch (Exception e2)
-//          {
-//            debug.set_debug("Serial port NOT closed, Exception: " + e.getMessage());
-//          }
-//
-//          debug.set_debug("Serial port NOT opened, Exception: " + e.getMessage());
-//        }
-//      }
-//      else
-//      {
-//        if(portId.isCurrentlyOwned())
-//        {
-//          debug.set_debug("Serial port already owned by " + portId.getCurrentOwner());
-//        }
-//      }
-//
-//      try
-//      {
-//        Thread.sleep(2000);
-//      } catch (InterruptedException e)
-//      {
-//        // TODO Auto-generated catch block
-//        e.printStackTrace();
-//      }
-//    }
+
   }
 
   public String clean_read_string(String read_string)
