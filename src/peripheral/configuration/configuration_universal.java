@@ -14,7 +14,8 @@ public class configuration_universal
   // ========== SERIAL COMPORT RAWDATA TIMEOUT
 
   public static int          COMPORT_RAW_DATA_TIMEOUT     = 1;                                                           // Seconds
-  public static int          SLEEP_THREAD_OCR             = 500; //Mili Seconds      
+  public static int          SLEEP_THREAD_OCR             = 500; //Mili Seconds     
+  public static int          SLEEP_THREAD_BC             = 500; //Mili Seconds   
 //
   // ========== KIOSK MANAGER STATUSES
   // PRINTER STATUSES
