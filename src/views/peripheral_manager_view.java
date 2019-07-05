@@ -35,8 +35,8 @@ public class peripheral_manager_view extends javax.swing.JFrame
     BT.setContentAreaFilled(false);
     BP.setContentAreaFilled(false);
     OC.setContentAreaFilled(false);
-    BC.setContentAreaFilled(false);
     BG.setContentAreaFilled(false);
+    SCALE.setContentAreaFilled(false);
 
     details.setVisible(false);
 
@@ -106,14 +106,14 @@ public class peripheral_manager_view extends javax.swing.JFrame
     check_ocr = new javax.swing.JLabel();
     ocr_title = new javax.swing.JLabel();
     OC = new javax.swing.JButton();
-    bcr_panel = new javax.swing.JPanel();
-    bcr_title = new javax.swing.JLabel();
-    check_bcr = new javax.swing.JLabel();
-    BC = new javax.swing.JButton();
-    bg_panel = new javax.swing.JPanel();
-    bg_title = new javax.swing.JLabel();
-    check_bg = new javax.swing.JLabel();
+    bgr_panel = new javax.swing.JPanel();
+    bgr_title = new javax.swing.JLabel();
+    check_bgr = new javax.swing.JLabel();
     BG = new javax.swing.JButton();
+    scale_panel = new javax.swing.JPanel();
+    scale_title = new javax.swing.JLabel();
+    check_scale = new javax.swing.JLabel();
+    SCALE = new javax.swing.JButton();
     back = new javax.swing.JButton();
     jScrollPane2 = new javax.swing.JScrollPane();
     com_text_area = new javax.swing.JTextArea();
@@ -540,48 +540,22 @@ public class peripheral_manager_view extends javax.swing.JFrame
 
     buttons_panel.add(ocr_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 30, 180, 160));
 
-    bcr_panel.setBackground(new java.awt.Color(0, 153, 153));
-    bcr_panel.setLayout(null);
+    bgr_panel.setBackground(new java.awt.Color(0, 153, 153));
+    bgr_panel.setLayout(null);
 
-    bcr_title.setFont(new java.awt.Font("Proxima Nova Alt Lt", 0, 18)); // NOI18N
-    bcr_title.setForeground(new java.awt.Color(255, 255, 255));
-    bcr_title.setText("BC");
-    bcr_panel.add(bcr_title);
-    bcr_title.setBounds(10, 127, 50, 20);
+    bgr_title.setFont(new java.awt.Font("Proxima Nova Alt Lt", 0, 18)); // NOI18N
+    bgr_title.setForeground(new java.awt.Color(255, 255, 255));
+    bgr_title.setText("BG");
+    bgr_panel.add(bgr_title);
+    bgr_title.setBounds(10, 127, 50, 20);
 
-    check_bcr.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/red_error.png"))); // NOI18N
-    bcr_panel.add(check_bcr);
-    check_bcr.setBounds(140, 13, 30, 30);
+    check_bgr.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/red_error.png"))); // NOI18N
+    bgr_panel.add(check_bgr);
+    check_bgr.setBounds(140, 13, 30, 30);
 
-    BC.setBackground(new java.awt.Color(0, 204, 153));
-    BC.setForeground(new java.awt.Color(255, 255, 255));
-    BC.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/barcode.png"))); // NOI18N
-    BC.addActionListener(new java.awt.event.ActionListener()
-    {
-      public void actionPerformed(java.awt.event.ActionEvent evt)
-      {
-        BCActionPerformed(evt);
-      }
-    });
-    bcr_panel.add(BC);
-    BC.setBounds(0, 0, 180, 160);
-
-    buttons_panel.add(bcr_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 220, 180, 160));
-
-    bg_panel.setBackground(new java.awt.Color(153, 0, 51));
-    bg_panel.setLayout(null);
-
-    bg_title.setFont(new java.awt.Font("Proxima Nova Alt Lt", 0, 18)); // NOI18N
-    bg_title.setForeground(new java.awt.Color(255, 255, 255));
-    bg_title.setText("BG");
-    bg_panel.add(bg_title);
-    bg_title.setBounds(10, 127, 50, 20);
-
-    check_bg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/red_error.png"))); // NOI18N
-    bg_panel.add(check_bg);
-    check_bg.setBounds(140, 13, 30, 30);
-
-    BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/print-128.png"))); // NOI18N
+    BG.setBackground(new java.awt.Color(0, 204, 153));
+    BG.setForeground(new java.awt.Color(255, 255, 255));
+    BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/barcode.png"))); // NOI18N
     BG.addActionListener(new java.awt.event.ActionListener()
     {
       public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -589,10 +563,36 @@ public class peripheral_manager_view extends javax.swing.JFrame
         BGActionPerformed(evt);
       }
     });
-    bg_panel.add(BG);
+    bgr_panel.add(BG);
     BG.setBounds(0, 0, 180, 160);
 
-    buttons_panel.add(bg_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 220, 180, 160));
+    buttons_panel.add(bgr_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 220, 180, 160));
+
+    scale_panel.setBackground(new java.awt.Color(153, 0, 51));
+    scale_panel.setLayout(null);
+
+    scale_title.setFont(new java.awt.Font("Proxima Nova Alt Lt", 0, 18)); // NOI18N
+    scale_title.setForeground(new java.awt.Color(255, 255, 255));
+    scale_title.setText("SCALE");
+    scale_panel.add(scale_title);
+    scale_title.setBounds(10, 127, 150, 20);
+
+    check_scale.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/red_error.png"))); // NOI18N
+    scale_panel.add(check_scale);
+    check_scale.setBounds(140, 13, 30, 30);
+
+    SCALE.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/small_scale.png"))); // NOI18N
+    SCALE.addActionListener(new java.awt.event.ActionListener()
+    {
+      public void actionPerformed(java.awt.event.ActionEvent evt)
+      {
+        SCALEActionPerformed(evt);
+      }
+    });
+    scale_panel.add(SCALE);
+    SCALE.setBounds(0, 0, 180, 160);
+
+    buttons_panel.add(scale_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 220, 180, 160));
 
     main_panel.add(buttons_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 140, 720, 420));
 
@@ -674,8 +674,8 @@ public class peripheral_manager_view extends javax.swing.JFrame
       m_controller.load_peripheral();
     }//GEN-LAST:event_OCActionPerformed
 
-    private void BCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BCActionPerformed
-      title.setText("BC");
+    private void BGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BGActionPerformed
+      title.setText("BG");
       buttons_panel.setVisible(false);
       details.setVisible(true);
 
@@ -688,7 +688,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
 
       back.setVisible(true);
       m_controller.load_peripheral();
-    }//GEN-LAST:event_BCActionPerformed
+    }//GEN-LAST:event_BGActionPerformed
 
     private void BPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BPActionPerformed
       title.setText("BP");
@@ -705,8 +705,8 @@ public class peripheral_manager_view extends javax.swing.JFrame
       m_controller.load_peripheral();
     }//GEN-LAST:event_BPActionPerformed
 
-    private void BGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BGActionPerformed
-      title.setText("BG");
+    private void SCALEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SCALEActionPerformed
+      title.setText("SCALE");
       buttons_panel.setVisible(false);
       details.setVisible(true);
 
@@ -719,7 +719,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
 
       back.setVisible(true);
       m_controller.load_peripheral();
-    }//GEN-LAST:event_BGActionPerformed
+    }//GEN-LAST:event_SCALEActionPerformed
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
       back.setVisible(false);
@@ -759,29 +759,27 @@ public class peripheral_manager_view extends javax.swing.JFrame
 
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JButton BC;
   private javax.swing.JButton BG;
   private javax.swing.JButton BP;
   private javax.swing.JButton BT;
   public static javax.swing.JLabel COM_port_label;
   private javax.swing.JButton OC;
+  private javax.swing.JButton SCALE;
   private javax.swing.JPanel atb_panel;
   private javax.swing.JLabel atb_title;
   private javax.swing.JButton back;
   public static javax.swing.JLabel baud_rate_label;
-  private javax.swing.JPanel bcr_panel;
-  private javax.swing.JLabel bcr_title;
-  private javax.swing.JPanel bg_panel;
-  private javax.swing.JLabel bg_title;
+  private javax.swing.JPanel bgr_panel;
+  private javax.swing.JLabel bgr_title;
   private javax.swing.JPanel btp_panel;
   private javax.swing.JLabel btp_title;
   private javax.swing.JPanel buttons_panel;
   public javax.swing.JLabel check_atb;
-  public javax.swing.JLabel check_bcr;
-  public javax.swing.JLabel check_bg;
+  public javax.swing.JLabel check_bgr;
   public javax.swing.JLabel check_btp;
   public static javax.swing.JLabel check_icon;
   public javax.swing.JLabel check_ocr;
+  public javax.swing.JLabel check_scale;
   private javax.swing.JButton clean_button;
   private javax.swing.JLabel clean_label;
   private javax.swing.JLabel clean_logo;
@@ -819,6 +817,8 @@ public class peripheral_manager_view extends javax.swing.JFrame
   private javax.swing.JButton refresh_button;
   private javax.swing.JLabel refresh_label;
   private javax.swing.JPanel refresh_panel;
+  private javax.swing.JPanel scale_panel;
+  private javax.swing.JLabel scale_title;
   private javax.swing.JScrollPane scroll_pane_data_received;
   private javax.swing.JScrollPane scroll_pane_data_sent;
   private javax.swing.JLabel send_icon;

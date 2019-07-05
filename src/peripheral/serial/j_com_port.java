@@ -301,6 +301,7 @@ public class j_com_port extends com_port implements SerialPortDataListener
       {
         outStream.close();
         inStream.close();
+        debug.set_debug("Port closed " + com_port_name);
       } catch (Exception ex)
       {
 
@@ -434,7 +435,7 @@ public class j_com_port extends com_port implements SerialPortDataListener
     if (serial_port != null)
     {
       result = serial_port.getCTS();
-      debug.set_debug(this.com_port_name + " getCTS: " + result);
+//      debug.set_debug(this.com_port_name + " getCTS: " + result);
     }
 
     if (!result)
@@ -457,7 +458,7 @@ public class j_com_port extends com_port implements SerialPortDataListener
     if (serial_port != null)
     {
       result = serial_port.getDSR();
-      debug.set_debug(this.com_port_name + " getDSR: " + result);
+//      debug.set_debug(this.com_port_name + " getDSR: " + result);
     }
     return result;
   }
@@ -727,9 +728,34 @@ public class j_com_port extends com_port implements SerialPortDataListener
   
   public static void main(String[] args)
   {
-    j_com_port jc = new j_com_port();
-    boolean answer = jc.open_port("COM5", "9600", "8", "1", "NONE", true);
+    j_com_port comport_instance = new j_com_port();
+    boolean answer = comport_instance.open_port("COM30", "9600", "8", "1", "NONE", true);
     debug.set_debug("answer: " + answer);
+    while(true)
+    {
+      try
+      {
+        if (comport_instance.is_open() == configuration_universal.DEVICE_OK && comport_instance.isDSR() && comport_instance.isCTS())
+        {
+          String data = comport_instance.get_available_data();
+          if (!data.equals(""))
+          {
+            debug.set_debug("data: " + data);
+            comport_instance.clean();
+          }
+        }
+        else
+        {
+          comport_instance.close_port();
+          comport_instance.open_port("COM30", "9600", "8", "1", "NONE", true);
+        }
+        Thread.sleep(2000);
+      }
+      catch (InterruptedException ex)
+      {
+        debug.set_debug(ex.getMessage());
+      }
+    }
   }
   
   public static void main1SDF(String[] args)

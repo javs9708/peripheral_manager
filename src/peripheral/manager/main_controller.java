@@ -6,8 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import javax.swing.ImageIcon;
 import peripheral.configuration.configuration_universal;
-import peripheral.core.bc_manager;
 import peripheral.core.bg_manager;
+import peripheral.core.scale_manager;
 import peripheral.core.bp_manager;
 import peripheral.core.bt_manager;
 import peripheral.core.oc_manager;
@@ -18,10 +18,10 @@ import views.peripheral_manager_view;
 public class main_controller
 {
 
-  bc_manager bc_manager_instance = null;
+  bg_manager bg_manager_instance = null;
   bt_manager bt_manager_instance = null;
   bp_manager bp_manager_instance = null;
-  bg_manager bg_manager_instance = null;
+  scale_manager scale_manager_instance = null;
   oc_manager oc_manager_instance = null;
 
   public static peripheral_manager_view peripheral_manager_view_instance;
@@ -49,13 +49,13 @@ public class main_controller
       {
         bp_manager_instance = new bp_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2], server_instance.json_com_ports[i][3], server_instance.json_com_ports[i][4], server_instance.json_com_ports[i][5], true);
       }
-      if (server_instance.json_com_ports[i][0].equals("bc"))
-      {
-        bc_manager_instance = new bc_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2], server_instance.json_com_ports[i][3], server_instance.json_com_ports[i][4], server_instance.json_com_ports[i][5], false);
-      }
       if (server_instance.json_com_ports[i][0].equals("bg"))
       {
         bg_manager_instance = new bg_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2], server_instance.json_com_ports[i][3], server_instance.json_com_ports[i][4], server_instance.json_com_ports[i][5], false);
+      }
+      if (server_instance.json_com_ports[i][0].equals("scale"))
+      {
+        scale_manager_instance = new scale_manager(server_instance.json_com_ports[i][1], server_instance.json_com_ports[i][2], server_instance.json_com_ports[i][3], server_instance.json_com_ports[i][4], server_instance.json_com_ports[i][5], false);
       }
       if (server_instance.json_com_ports[i][0].equals("oc"))
       {
@@ -177,27 +177,6 @@ public class main_controller
       }
     }
 
-    /////////////////////////////// BC
-    if (peripheral_manager_view_instance.title.getText().equals("BC"))
-    {
-      if (bc_manager_instance != null)
-      {
-        if (bc_manager_instance.is_available())
-        {
-
-          peripheral_set_details(configuration_universal.AVAILABLE_TEXT, load_details, bc_manager_instance);
-        }
-        else
-        {
-          peripheral_set_details(configuration_universal.UNAVAILABLE_TEXT, load_details, bc_manager_instance);
-        }
-      }
-      else
-      {
-        peripheral_set_details(configuration_universal.UNASSIGNED_TEXT, load_details, bc_manager_instance);
-      }
-    }
-
     /////////////////////////////// BG
     if (peripheral_manager_view_instance.title.getText().equals("BG"))
     {
@@ -216,6 +195,27 @@ public class main_controller
       else
       {
         peripheral_set_details(configuration_universal.UNASSIGNED_TEXT, load_details, bg_manager_instance);
+      }
+    }
+
+    /////////////////////////////// SCALE
+    if (peripheral_manager_view_instance.title.getText().equals("SCALE"))
+    {
+      if (scale_manager_instance != null)
+      {
+        if (scale_manager_instance.is_available())
+        {
+
+          peripheral_set_details(configuration_universal.AVAILABLE_TEXT, load_details, scale_manager_instance);
+        }
+        else
+        {
+          peripheral_set_details(configuration_universal.UNAVAILABLE_TEXT, load_details, scale_manager_instance);
+        }
+      }
+      else
+      {
+        peripheral_set_details(configuration_universal.UNASSIGNED_TEXT, load_details, scale_manager_instance);
       }
     }
 
@@ -354,21 +354,21 @@ public class main_controller
       peripheral_manager_view_instance.check_btp.setIcon(red_error);
     }
 
-    if (bc_manager_instance != null && bc_manager_instance.is_available())
-    {
-      peripheral_manager_view_instance.check_bcr.setIcon(green_ok);
-    }
-    else
-    {
-      peripheral_manager_view_instance.check_bcr.setIcon(red_error);
-    }
     if (bg_manager_instance != null && bg_manager_instance.is_available())
     {
-      peripheral_manager_view_instance.check_bg.setIcon(green_ok);
+      peripheral_manager_view_instance.check_bgr.setIcon(green_ok);
     }
     else
     {
-      peripheral_manager_view_instance.check_bg.setIcon(red_error);
+      peripheral_manager_view_instance.check_bgr.setIcon(red_error);
+    }
+    if (scale_manager_instance != null && scale_manager_instance.is_available())
+    {
+      peripheral_manager_view_instance.check_scale.setIcon(green_ok);
+    }
+    else
+    {
+      peripheral_manager_view_instance.check_scale.setIcon(red_error);
     }
     if (oc_manager_instance != null && oc_manager_instance.is_available())
     {

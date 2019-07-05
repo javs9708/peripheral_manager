@@ -86,29 +86,29 @@ public class old_com_port extends com_port implements SerialPortEventListener
    */
   public void set_actual_error(String error)
   {
-    actual_error = error;
-    
-    if(!actual_error.equals("") && !actual_error.equals(last_error))
-    {
-      last_error = actual_error;
-      if(com_port_name.equals("COM3"))
-      {
-        debug.set_debug("BT ERROR: " + actual_error);
-      }
-      if(com_port_name.equals("COM5"))
-      {
-        debug.set_debug("BCR ERROR: " + actual_error);
-      }
-      if(com_port_name.equals("COM6"))
-      {
-        debug.set_debug("Door Sensor ERROR: " + actual_error);
-      }
-      if(com_port_name.equals("COM7"))
-      {
-        debug.set_debug("SCALE ERROR: " + actual_error);
-      }
-    }
-    
+//    actual_error = error;
+//    
+//    if(!actual_error.equals("") && !actual_error.equals(last_error))
+//    {
+//      last_error = actual_error;
+//      if(com_port_name.equals("COM3"))
+//      {
+        debug.set_debug("ERROR: " + actual_error);
+//      }
+//      if(com_port_name.equals("COM5"))
+//      {
+//        debug.set_debug("BGR ERROR: " + actual_error);
+//      }
+//      if(com_port_name.equals("COM6"))
+//      {
+//        debug.set_debug("Door Sensor ERROR: " + actual_error);
+//      }
+//      if(com_port_name.equals("COM7"))
+//      {
+//        debug.set_debug("SCALE ERROR: " + actual_error);
+//      }
+//    }
+//    
   }
 
   public boolean is_connection_error()
@@ -811,7 +811,7 @@ public class old_com_port extends com_port implements SerialPortEventListener
   {
     old_com_port comport_instance = new old_com_port();
     
-    boolean answer = comport_instance.open_port("COM5", "9600", "8", "1", "NONE", false);
+    boolean answer = comport_instance.open_port("COM30", "9600", "8", "1", "NONE", false);
     comport_instance.set_dtr();
     comport_instance.set_rts();
     debug.set_debug("answer: " + answer);
