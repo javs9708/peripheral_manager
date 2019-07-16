@@ -18,7 +18,7 @@ public class server
 {
 
   public static XmlRpcClient client        = null;
-  static String              XMLRPC_SERVER = "http://staging.inkcloud.io//test_listener.php ";
+  static String              XMLRPC_SERVER = "http://development.inkcloud.io//test_listener.php ";
 
   String peripheral_type;
   String com_port;

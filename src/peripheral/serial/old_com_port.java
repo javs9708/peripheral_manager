@@ -35,7 +35,6 @@ public class old_com_port extends com_port implements SerialPortEventListener
   OutputStream           outStream;
   InputStream            inStream;
   byte[]                 readBuffer;
-  private String         data              = "";
 
   public boolean         com_port_opened   = false;
 

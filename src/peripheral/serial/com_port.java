@@ -14,6 +14,8 @@ import peripheral.logs.debug;
  */
 public class com_port
 {
+  String         data              = "";
+  
   public boolean open_port(String com_port_name, String baud_rate, String data_bits, String stop_bits, String parity, boolean is_serial_printer)
   {
     debug.set_debug("Method not implemented");
@@ -87,7 +89,7 @@ public class com_port
   
   public void clean()
   {
-    debug.set_debug("Method not implemented");
+    data = "";
   }
   
   public boolean set_dtr()

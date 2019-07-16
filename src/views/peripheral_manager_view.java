@@ -41,6 +41,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
     details.setVisible(false);
 
     back.setVisible(false);
+    port_viewer_scroll.setVisible(false);
 
   }
 
@@ -115,7 +116,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
     check_scale = new javax.swing.JLabel();
     SCALE = new javax.swing.JButton();
     back = new javax.swing.JButton();
-    jScrollPane2 = new javax.swing.JScrollPane();
+    port_viewer_scroll = new javax.swing.JScrollPane();
     com_text_area = new javax.swing.JTextArea();
     main_title1 = new javax.swing.JLabel();
 
@@ -613,9 +614,9 @@ public class peripheral_manager_view extends javax.swing.JFrame
 
     com_text_area.setColumns(20);
     com_text_area.setRows(5);
-    jScrollPane2.setViewportView(com_text_area);
+    port_viewer_scroll.setViewportView(com_text_area);
 
-    main_panel.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 590, 150, 50));
+    main_panel.add(port_viewer_scroll, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 590, 150, 50));
 
     main_title1.setFont(new java.awt.Font("Proxima Nova Alt Lt", 0, 24)); // NOI18N
     main_title1.setForeground(new java.awt.Color(243, 54, 54));
@@ -801,7 +802,6 @@ public class peripheral_manager_view extends javax.swing.JFrame
   private javax.swing.JPanel device_details_panel;
   public static javax.swing.JLabel error_label;
   private javax.swing.JScrollPane jScrollPane1;
-  private javax.swing.JScrollPane jScrollPane2;
   private javax.swing.JTextField line;
   private javax.swing.JLabel logo_ink;
   private javax.swing.JPanel main_panel;
@@ -810,6 +810,7 @@ public class peripheral_manager_view extends javax.swing.JFrame
   private javax.swing.JPanel ocr_panel;
   private javax.swing.JLabel ocr_title;
   public static javax.swing.JLabel parity_label;
+  private javax.swing.JScrollPane port_viewer_scroll;
   public javax.swing.JButton print_button;
   private javax.swing.JLabel print_icon;
   private javax.swing.JLabel print_label;

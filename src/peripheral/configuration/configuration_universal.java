@@ -36,4 +36,7 @@ public class configuration_universal
   public static final String INITIAL_COMMAND_1            = "CR";
   public static final String INITIAL_COMMAND_2            = "CR";
   public static final String COMMAND_AFTER_ANSWER         = "CR";
+  public static final String SUBSTRING_BGR_ANSWER         = "AKBGRCROK";
+  
+  
 }

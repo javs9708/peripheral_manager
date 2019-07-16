@@ -131,10 +131,10 @@ public class main_controller
 
   public void load_peripheral_thread(boolean load_details)
   {
-    if (load_details)
-    {
+//    if (load_details)
+//    {
       set_default_details();
-    }
+//    }
     /////////////////////////////// BT
     if (peripheral_manager_view_instance.title.getText().equals("BT"))
     {
@@ -293,29 +293,23 @@ public class main_controller
       
       if (force_load_details)
       {
-        String com_port_label = peripheral_manager_view_instance.COM_port_label.getText();
         String com_port = peripheral_instance.comport_instance.get_com_port_name();
-        peripheral_manager_view_instance.COM_port_label.setText(com_port_label + " " + com_port);
+        peripheral_manager_view_instance.COM_port_label.setText("COM port: " + com_port);
 
         String baud_rate = peripheral_instance.comport_instance.get_baud_rate();
-        String baud_rate_label = peripheral_manager_view_instance.baud_rate_label.getText();
-        peripheral_manager_view_instance.baud_rate_label.setText(baud_rate_label + " " + baud_rate);
+        peripheral_manager_view_instance.baud_rate_label.setText("Baud rate: " + baud_rate);
 
         String data_bits = peripheral_instance.comport_instance.get_data_bits();
-        String data_bits_label = peripheral_manager_view_instance.data_bits_label.getText();
-        peripheral_manager_view_instance.data_bits_label.setText(data_bits_label + " " + data_bits);
+        peripheral_manager_view_instance.data_bits_label.setText("Data bits: " + data_bits);
 
         String stop_bits = peripheral_instance.comport_instance.get_stop_bits();
-        String stop_bits_label = peripheral_manager_view_instance.stop_bits_label.getText();
-        peripheral_manager_view_instance.stop_bits_label.setText(stop_bits_label + " " + stop_bits);
+        peripheral_manager_view_instance.stop_bits_label.setText("Stop bits: " + stop_bits);
 
         String parity = peripheral_instance.comport_instance.get_parity();
-        String parity_label = peripheral_manager_view_instance.parity_label.getText();
-        peripheral_manager_view_instance.parity_label.setText(parity_label + " " + parity);
+        peripheral_manager_view_instance.parity_label.setText("Parity: " + parity);
 
         peripheral_manager_view_instance.print_button.setEnabled(true);
       }
-
     }
   }
 
@@ -329,7 +323,7 @@ public class main_controller
     peripheral_manager_view_instance.baud_rate_label.setText("Baud rate:");
     peripheral_manager_view_instance.data_bits_label.setText("Data bits:");
     peripheral_manager_view_instance.stop_bits_label.setText("Stop bits:");
-    peripheral_manager_view_instance.parity_label.setText("Parity :");
+    peripheral_manager_view_instance.parity_label.setText("Parity:");
 
     peripheral_manager_view_instance.print_button.setEnabled(false);
 

@@ -26,7 +26,7 @@ public class j_com_port extends com_port implements SerialPortDataListener
   OutputStream           outStream;
   InputStream            inStream;
   byte[]                 readBuffer;
-  private String         data              = "";
+  
 
   public boolean         com_port_opened   = false;
 
@@ -358,11 +358,7 @@ public class j_com_port extends com_port implements SerialPortDataListener
     }
   }
 
-  @Override
-  public void clean()
-  {
-    data = "";
-  }
+  
 
   public void read_serial()
   {

@@ -41,14 +41,21 @@ public class bg_manager extends peripheral
                 {
                   comport_instance.set_pectab(configuration_universal.INITIAL_COMMAND_1);
                   comport_instance.set_pectab(configuration_universal.INITIAL_COMMAND_2);
+                  Thread.sleep(100);
                   comport_instance.clean();
                   send_first_command = false;
                 }
                 String data_received = comport_instance.get_available_data();
-                if (!data_received.equals(""))
+                if (!data_received.equals("") && !data_received.contains(configuration_universal.SUBSTRING_BGR_ANSWER))
                 {
                   main_controller.peripheral_manager_view_instance.text_area_data_received_unique.setText(data_received + "\n" + main_controller.peripheral_manager_view_instance.text_area_data_received_unique.getText());
                   comport_instance.set_pectab(configuration_universal.COMMAND_AFTER_ANSWER);
+                  Thread.sleep(100);
+                  comport_instance.clean();
+                }
+                else
+                {
+                  debug.set_debug("data_received: [" + data_received + "]");
                   comport_instance.clean();
                 }
               }
