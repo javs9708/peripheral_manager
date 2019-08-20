@@ -38,5 +38,8 @@ public class configuration_universal
   public static final String COMMAND_AFTER_ANSWER         = "CR";
   public static final String SUBSTRING_BGR_ANSWER         = "AKBGRCROK";
   
-  
+  // PATH
+  public static final String SERVER_FILE_PATH             = "C:\\WEBCUTE-NEW\\peripheral_manager\\server.ini";
+  public static String SERVER_ADDRESS                     = "";
+  public static String SERVER_LISTENER                    = "/test_listener.php ";
 }

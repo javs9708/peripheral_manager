@@ -12,13 +12,13 @@ import java.net.URL;
 
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
+import peripheral.core.helper;
 import peripheral.logs.debug;
 
 public class server
 {
 
   public static XmlRpcClient client        = null;
-  static String              XMLRPC_SERVER = "http://development.inkcloud.io//test_listener.php ";
 
   String peripheral_type;
   String com_port;
@@ -45,9 +45,9 @@ public class server
       {
         client = new XmlRpcClient();
         XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-        config.setServerURL(new URL(XMLRPC_SERVER));
+        config.setServerURL(new URL(helper.get_xmlrpc_server_address()));
         client.setConfig(config);
-        debug.set_debug("XMLRPC Client created, Conecting to [" + XMLRPC_SERVER + "]");
+        debug.set_debug("XMLRPC Client created, Conecting to [" + helper.get_xmlrpc_server_address() + "]");
       }
     } catch (Exception e)
     {
